@@ -11,6 +11,7 @@ public class Range {
 
     public double getFrom() {
         return from;
+
     }
 
     public double getTo() {
