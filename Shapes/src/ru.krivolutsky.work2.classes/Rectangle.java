@@ -1,6 +1,6 @@
 package ru.krivolutsky.work2.classes;
 
-public class Rectangle implements Shape {
+public class Rectangle implements Shape{
     private double width;
     private double height;
 
@@ -8,7 +8,6 @@ public class Rectangle implements Shape {
         this.width = width;
         this.height = height;
     }
-
 
     @Override
     public double getWidth() {

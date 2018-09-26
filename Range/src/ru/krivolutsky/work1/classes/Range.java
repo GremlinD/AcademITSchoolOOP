@@ -11,7 +11,6 @@ public class Range {
 
     public double getFrom() {
         return from;
-
     }
 
     public double getTo() {
@@ -31,7 +30,7 @@ public class Range {
     }
 
     public boolean isInside(double number) {
-        return number < to && number > from;
+        return number <= to && number >= from;
     }
 
     /**
@@ -81,6 +80,6 @@ public class Range {
         } else if (secondRange.from < this.from && this.to > secondRange.to) {
             return new Range[]{new Range(secondTo, to)};
         }
-        return null;
+        return new Range[]{};
     }
 }

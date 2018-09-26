@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        List<Shape> shapes = new ArrayList<>();
+        SortByArea sortByArea = new SortByArea();
+        List<Shape> shapes = new ArrayList<Shape>(sortByArea);
 
         shapes.add(new Circle(4));
         shapes.add(new Rectangle(2, 4));
@@ -17,6 +18,9 @@ public class Main {
         shapes.add(new Rectangle(6, 3));
         shapes.add(new Circle(8));
 
-
+        for (Shape p :
+                shapes) {
+            System.out.println(p.getArea());
+        }
     }
 }
