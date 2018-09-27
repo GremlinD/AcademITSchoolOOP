@@ -44,8 +44,12 @@ public class Main {
         System.out.println();
 
         Range[] rangesDifference = range1.getDifferenceIntervals(range2);
-        for (Range r : rangesDifference) {
-            System.out.printf("Разность: %f, %f%n", r.getFrom(), r.getTo());
+        if (rangesDifference.length != 0) {
+            for (Range r : rangesDifference) {
+                System.out.printf("Разность: %f, %f%n", r.getFrom(), r.getTo());
+            }
+        } else {
+            System.out.println("Разности нет");
         }
     }
 }
