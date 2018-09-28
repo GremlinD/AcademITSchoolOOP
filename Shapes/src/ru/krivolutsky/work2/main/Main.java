@@ -1,19 +1,20 @@
 package ru.krivolutsky.work2.main;
 
 import ru.krivolutsky.work2.classes.*;
+import ru.krivolutsky.work2.compare.SortByArea;
+import ru.krivolutsky.work2.compare.SortByPerimeter;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Main {
     private static Shape findFigureWithLargestArea(List<Shape> shapes) {
-        shapes.sort(Comparator.comparingDouble(Shape::getArea));
+        shapes.sort(new SortByArea());
         return shapes.get(shapes.size() - 1);
     }
 
     private static Shape findFigureWithLargestPerimeter(List<Shape> shapes) {
-        shapes.sort(Comparator.comparingDouble(Shape::getPerimeter));
+        shapes.sort(new SortByPerimeter());
         return shapes.get(shapes.size() - 2);
     }
 
@@ -32,5 +33,7 @@ public class Main {
         System.out.printf("Информация о фигуре с наибольшей площадью: класс - %s, площадь - %f, высота - %f, периметр - %f, ширина - %f%n", maximumAreaShape.getClass().toString(), maximumAreaShape.getArea(), maximumAreaShape.getHeight(), maximumAreaShape.getPerimeter(), maximumAreaShape.getWidth());
         Shape secondMaximumPerimeterShape = findFigureWithLargestPerimeter(shapes);
         System.out.printf("Информация о фигуре со вторым по величине периметром: класс - %s, площадь - %f, высота - %f, периметр - %f, ширина - %f", secondMaximumPerimeterShape.getClass().toString(), secondMaximumPerimeterShape.getArea(), secondMaximumPerimeterShape.getHeight(), secondMaximumPerimeterShape.getPerimeter(), secondMaximumPerimeterShape.getWidth());
+
+
     }
 }

@@ -1,30 +1,30 @@
 package ru.krivolutsky.work2.classes;
 
-public class Square implements Shape {
-    private double length;
+public class Circle implements Shape {
+    private double radius;
 
-    public Square(double length) {
-        this.length = length;
+    public Circle(double radius) {
+        this.radius = radius;
     }
 
     @Override
     public double getWidth() {
-        return length;
+        return radius * 2;
     }
 
     @Override
     public double getHeight() {
-        return length;
+        return radius * 2;
     }
 
     @Override
     public double getArea() {
-        return Math.pow(length, 2);
+        return Math.PI * Math.pow(radius, 2);
     }
 
     @Override
     public double getPerimeter() {
-        return 4 * length;
+        return 2 * Math.PI * radius;
     }
 
     @Override
@@ -37,21 +37,21 @@ public class Square implements Shape {
             return false;
         }
 
-        Square square = (Square) o;
+        Circle circle = (Circle) o;
 
-        return length == square.length;
+        return radius == circle.radius;
     }
 
     @Override
     public int hashCode() {
         final int prime = 19;
         int hash = 1;
-        hash = prime * hash + Double.hashCode(length);
+        hash = prime * hash + Double.hashCode(radius);
         return hash;
     }
 
     @Override
-    public String toString(){
-        return "length = " + length;
+    public String toString() {
+        return "radius = " + radius;
     }
 }

@@ -54,7 +54,7 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "height = " + height + ", width = " + width;
     }
 }
