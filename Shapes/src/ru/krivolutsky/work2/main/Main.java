@@ -1,20 +1,20 @@
 package ru.krivolutsky.work2.main;
 
 import ru.krivolutsky.work2.classes.*;
-import ru.krivolutsky.work2.compare.SortByArea;
-import ru.krivolutsky.work2.compare.SortByPerimeter;
+import ru.krivolutsky.work2.compare.SortByAreaComparator;
+import ru.krivolutsky.work2.compare.SortByPerimeterComparator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     private static Shape findFigureWithLargestArea(List<Shape> shapes) {
-        shapes.sort(new SortByArea());
+        shapes.sort(new SortByAreaComparator());
         return shapes.get(shapes.size() - 1);
     }
 
     private static Shape findFigureWithLargestPerimeter(List<Shape> shapes) {
-        shapes.sort(new SortByPerimeter());
+        shapes.sort(new SortByPerimeterComparator());
         return shapes.get(shapes.size() - 2);
     }
 
