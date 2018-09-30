@@ -1,7 +1,5 @@
 package ru.krivolutsky.work3.classes;
 
-import java.util.Arrays;
-
 public class Vector {
     private double[] arrayOfVectorComponents;
 
@@ -57,25 +55,81 @@ public class Vector {
     }
 
     public void add(Vector vector2) {
-        int sizeVector1 = this.arrayOfVectorComponents.length;
-        int sizeVector2 = vector2.arrayOfVectorComponents.length;
-        if (sizeVector1 < sizeVector2) {
-            for (int i = 0; i < sizeVector1; i++) {
-                vector2.arrayOfVectorComponents[i] += this.arrayOfVectorComponents[i];
+        int size1 = this.arrayOfVectorComponents.length;
+        int size2 = vector2.arrayOfVectorComponents.length;
+        if (size1 > size2) {
+            double[] newVector = new double[size1];
+            for (int i = 0; i < size2; i++) {
+                newVector[i] = this.arrayOfVectorComponents[i] + vector2.arrayOfVectorComponents[i];
             }
-            Arrays.sort(vector2.arrayOfVectorComponents);
+            if (size1 - size2 >= 0) {
+                System.arraycopy(this.arrayOfVectorComponents, size2, newVector, size2, size1 - size2);
+            }
+            this.arrayOfVectorComponents = newVector;
         } else {
-            for (int i = 0; i < sizeVector2; i++) {
-                this.arrayOfVectorComponents[i] += vector2.arrayOfVectorComponents[i];
+            double[] newVector = new double[size2];
+            for (int i = 0; i < size1; i++) {
+                newVector[i] = this.arrayOfVectorComponents[i] + vector2.arrayOfVectorComponents[i];
             }
-            Arrays.sort(this.arrayOfVectorComponents);
+            if (size2 - size1 >= 0) {
+                System.arraycopy(this.arrayOfVectorComponents, size1, newVector, size1, size2 - size1);
+            }
+            this.arrayOfVectorComponents = newVector;
+        }
+    }
+
+    public static Vector sum(Vector vector2) {
+        int size1 = .arrayOfVectorComponents.length;
+        int size2 = vector2.arrayOfVectorComponents.length;
+        if (size1 > size2) {
+            Vector newVector = new Vector(size1);
+            for (int i = 0; i < size2; i++) {
+                newVector.arrayOfVectorComponents[i] = this.arrayOfVectorComponents[i] + vector2.arrayOfVectorComponents[i];
+            }
+            if (size1 - size2 >= 0) {
+                System.arraycopy(this.arrayOfVectorComponents, size2, newVector.arrayOfVectorComponents, size2, size1 - size2);
+            }
+            return newVector;
+        } else {
+            Vector newVector = new Vector(size2);
+            for (int i = 0; i < size1; i++) {
+                newVector.arrayOfVectorComponents[i] = this.arrayOfVectorComponents[i] + vector2.arrayOfVectorComponents[i];
+            }
+            if (size2 - size1 >= 0) {
+                System.arraycopy(this.arrayOfVectorComponents, size1, newVector.arrayOfVectorComponents, size1, size2 - size1);
+            }
+            return newVector;
+        }
+    }
+
+    public void substract(Vector vector2) {
+        int size1 = this.arrayOfVectorComponents.length;
+        int size2 = vector2.arrayOfVectorComponents.length;
+        if (size1 > size2) {
+            double[] newVector = new double[size1];
+            for (int i = 0; i < size2; i++) {
+                newVector[i] = this.arrayOfVectorComponents[i] - vector2.arrayOfVectorComponents[i];
+            }
+            for (int i = size2; i < size1; i++) {
+                newVector[i] = -this.arrayOfVectorComponents[i];
+            }
+            this.arrayOfVectorComponents = newVector;
+        } else {
+            double[] newVector = new double[size2];
+            for (int i = 0; i < size1; i++) {
+                newVector[i] = this.arrayOfVectorComponents[i] - vector2.arrayOfVectorComponents[i];
+            }
+            for (int i = size1; i < size2; i++) {
+                newVector[i] = - vector2.arrayOfVectorComponents[i];
+            }
+            this.arrayOfVectorComponents = newVector;
         }
     }
 
     public double getLength() {
         int length = 0;
-        for (int i = 0; i < this.arrayOfVectorComponents.length; i++) {
-            length += Math.pow(this.arrayOfVectorComponents[i], 2);
+        for (double arrayOfVectorComponent : this.arrayOfVectorComponents) {
+            length += Math.pow(arrayOfVectorComponent, 2);
         }
         return Math.sqrt(length);
     }
