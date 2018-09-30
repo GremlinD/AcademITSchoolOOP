@@ -33,7 +33,5 @@ public class Main {
         System.out.printf("Информация о фигуре с наибольшей площадью: класс - %s, площадь - %f, высота - %f, периметр - %f, ширина - %f%n", maximumAreaShape.getClass().toString(), maximumAreaShape.getArea(), maximumAreaShape.getHeight(), maximumAreaShape.getPerimeter(), maximumAreaShape.getWidth());
         Shape secondMaximumPerimeterShape = findFigureWithLargestPerimeter(shapes);
         System.out.printf("Информация о фигуре со вторым по величине периметром: класс - %s, площадь - %f, высота - %f, периметр - %f, ширина - %f", secondMaximumPerimeterShape.getClass().toString(), secondMaximumPerimeterShape.getArea(), secondMaximumPerimeterShape.getHeight(), secondMaximumPerimeterShape.getPerimeter(), secondMaximumPerimeterShape.getWidth());
-
-
     }
 }
