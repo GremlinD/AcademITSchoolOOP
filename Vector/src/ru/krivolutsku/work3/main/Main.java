@@ -38,7 +38,7 @@ public class Main {
 
         System.out.print("Сумма векторов, записанная в новый вектор: ");
         vector1 = new Vector(new double[]{4, 7, -3, 7, 3});
-        Vector vector3 = Vector.sum(vector1,vector2);
+        Vector vector3 = Vector.sum(vector1, vector2);
         System.out.println(vector3);
 
         System.out.print("Разность векторов, записанная в первый вектор: ");
@@ -47,7 +47,7 @@ public class Main {
 
         System.out.print("Разность векторов, записанная в новый вектор: ");
         vector1 = new Vector(new double[]{4, 7, -3, 7, 3});
-        vector3 = Vector.difference(vector1,vector2);
+        vector3 = Vector.difference(vector1, vector2);
         System.out.println(vector3);
 
         System.out.print("Длина последнего вектора: ");
@@ -71,7 +71,7 @@ public class Main {
         double element = vector3.getComponentByIndex(scanner.nextInt());
         System.out.printf("Элемент по выбранному индексу: %f", element);
 
-        vector3 = Vector.getScalarProduct(vector1,vector2);
+        vector3 = Vector.getScalarProduct(vector1, vector2);
         System.out.print("Скалярное произведение векторов");
         System.out.println(vector3);
     }

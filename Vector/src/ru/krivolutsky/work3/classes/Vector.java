@@ -6,13 +6,12 @@ public class Vector {
     private double[] arrayOfVectorComponents;
 
     public Vector(int size) {
-        try {
-            this.arrayOfVectorComponents = new double[size];
-            for (int i = 0; i < size; i++) {
-                this.arrayOfVectorComponents[i] = 0;
-            }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Неверный размер вектора.");
+        if (size <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.arrayOfVectorComponents = new double[size];
+        for (int i = 0; i < size; i++) {
+            this.arrayOfVectorComponents[i] = 0;
         }
     }
 
@@ -25,17 +24,16 @@ public class Vector {
     }
 
     public Vector(int size, double[] array) {
-        try {
-            this.arrayOfVectorComponents = new double[size];
-            for (int i = 0; i < size; i++) {
-                if (i < array.length) {
-                    this.arrayOfVectorComponents[i] = array[i];
-                } else {
-                    this.arrayOfVectorComponents[i] = 0;
-                }
+        if (size <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.arrayOfVectorComponents = new double[size];
+        for (int i = 0; i < size; i++) {
+            if (i < array.length) {
+                this.arrayOfVectorComponents[i] = array[i];
+            } else {
+                this.arrayOfVectorComponents[i] = 0;
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println("Неверный размер вектора.");
         }
     }
 
