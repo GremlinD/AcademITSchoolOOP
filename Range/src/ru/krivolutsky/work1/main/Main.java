@@ -12,7 +12,7 @@ public class Main {
         System.out.printf("Значение from сейчас: %f%n", range.getFrom());
         System.out.println("Введите число, которое нужно записать в from:");
         Scanner scanner = new Scanner(System.in);
-
+        /*
         range.setFrom(scanner.nextDouble());
 
         System.out.printf("Значение to сейчас: %f%n", range.getTo());
@@ -23,7 +23,7 @@ public class Main {
 
         System.out.println("Введите число, которое хотите проверить на вхождение в диапазон:");
         System.out.println(range.isInside(scanner.nextDouble()));
-
+        */
         System.out.println("Введите позиции начала и конца двух диапазонов для проверки:");
         Range range1 = new Range(scanner.nextDouble(), scanner.nextDouble());
         Range range2 = new Range(scanner.nextDouble(), scanner.nextDouble());

@@ -39,7 +39,7 @@ public class Range {
     public Range getIntersection(Range secondRange) {
         double to = Math.min(this.to, secondRange.to);
         double from = Math.max(this.from, secondRange.from);
-        if (from <= to) {
+        if (from < to) {
             return new Range(from, to);
         } else {
             return null;
@@ -71,20 +71,24 @@ public class Range {
         double to = this.to;
         double secondTo = secondRange.to;
         double secondFrom = secondRange.from;
-        double epsilon = 1.0e-10;
-        if (this.to < secondRange.from || secondRange.to < this.from) {
+        if (secondFrom <= from) {
+            if (secondTo < to) {
+                if (secondTo > from) {
+                    return new Range[]{new Range(secondTo, to)};
+                } else {
+                    return new Range[]{new Range(from, to)};
+                }
+            } else {
+                return new Range[]{};
+            }
+        } else if (secondFrom < to) {
+            if (secondTo < to) {
+                return new Range[]{new Range(from, secondFrom), new Range(secondTo, to)};
+            } else {
+                return new Range[]{new Range(from, secondFrom)};
+            }
+        } else {
             return new Range[]{new Range(from, to)};
-        } else if (Math.abs(this.from - secondRange.to) < epsilon || Math.abs(secondRange.from - this.to) < epsilon) {
-            double maximumFrom = (this.from > secondRange.from) ? this.from : secondRange.from;
-            double minimumFrom = (this.from < secondRange.from) ? this.from : secondRange.from;
-            return new Range[]{new Range(minimumFrom, maximumFrom - 1)};
-        } else if (this.from < secondRange.from && secondRange.to < this.to) {
-            return new Range[]{new Range(from, secondFrom - 1), new Range(secondTo + 1, to)};
-        } else if (this.from < secondRange.from && this.to < secondRange.to) {
-            return new Range[]{new Range(from, secondFrom - 1)};
-        } else if (secondRange.from < this.from && this.to > secondRange.to) {
-            return new Range[]{new Range(secondTo, to - 1)};
         }
-        return new Range[]{};
     }
 }
