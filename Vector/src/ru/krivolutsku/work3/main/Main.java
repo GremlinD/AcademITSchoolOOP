@@ -54,7 +54,7 @@ public class Main {
         System.out.println(vector3.getLength());
 
         System.out.print("Развернутый последний вектор: ");
-        vector3.expand();
+        vector3.spin();
         System.out.println(vector3);
 
         System.out.println("Введите скаляр для умножения");
