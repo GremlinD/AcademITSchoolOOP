@@ -7,28 +7,25 @@ public class Vector {
 
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Неверный размер массива!");
+            throw new IllegalArgumentException("Вектор не может иметь размерность меньше единицы.");
         }
         this.components = new double[size];
     }
 
     public Vector(Vector vector) {
-        if (vector.components.length <= 0) {
-            throw new IllegalArgumentException("Неверный размер массива!");
-        }
         this.components = Arrays.copyOf(vector.components, vector.components.length);
     }
 
     public Vector(double[] array) {
         if (array.length <= 0) {
-            throw new IllegalArgumentException("Неверный размер массива!");
+            throw new IllegalArgumentException("Вектор не может иметь размерность меньше единицы.");
         }
         this.components = Arrays.copyOf(array, array.length);
     }
 
     public Vector(int size, double[] array) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Неверный размер массива!");
+            throw new IllegalArgumentException("Вектор не может иметь размерность меньше единицы.");
         }
         this.components = Arrays.copyOf(array, size);
     }
@@ -51,38 +48,32 @@ public class Vector {
     }
 
     public void add(Vector vector2) {
-        int maximumSize = Math.max(this.components.length, vector2.components.length);
-        this.components = Arrays.copyOf(this.components, maximumSize);
-        int i = 0;
-        while (i < vector2.components.length) {
+        if (this.components.length < vector2.components.length) {
+            this.components = Arrays.copyOf(this.components, vector2.components.length);
+        }
+        for (int i = 0; i < vector2.components.length; i++) {
             this.components[i] += vector2.components[i];
-            i++;
         }
     }
 
     public static Vector sum(Vector vector1, Vector vector2) {
-        double[] saveVector = Arrays.copyOf(vector1.components, vector1.components.length);
-        vector1.add(vector2);
-        double[] newVector = Arrays.copyOf(vector1.components, vector1.components.length);
-        vector1.components = Arrays.copyOf(saveVector, saveVector.length);
+        Vector newVector = new Vector(vector1);
+        newVector.add(vector2);
         return new Vector(newVector);
     }
 
     public void subtract(Vector vector2) {
-        int maximumSize = Math.max(this.components.length, vector2.components.length);
-        this.components = Arrays.copyOf(this.components, maximumSize);
-        int i = 0;
-        while (i < vector2.components.length) {
+        if (this.components.length < vector2.components.length) {
+            this.components = Arrays.copyOf(this.components, vector2.components.length);
+        }
+        for (int i = 0; i < vector2.components.length; i++) {
             this.components[i] -= vector2.components[i];
-            i++;
         }
     }
 
     public static Vector difference(Vector vector1, Vector vector2) {
-        double[] saveVector = Arrays.copyOf(vector1.components, vector1.components.length);
-        vector1.subtract(vector2);
-        double[] newVector = Arrays.copyOf(vector1.components, vector1.components.length);
-        vector1.components = Arrays.copyOf(saveVector, saveVector.length);
+        Vector newVector = new Vector(vector1);
+        newVector.subtract(vector2);
         return new Vector(newVector);
     }
 
@@ -146,12 +137,12 @@ public class Vector {
     }
 
     public static Vector getScalarProduct(Vector vector1, Vector vector2) {
-        double[] newArrayVector = new double[Math.max(vector1.components.length, vector2.components.length)];
+        Vector newVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()));
         int i = 0;
-        while (i < vector1.components.length && i < vector2.components.length) {
-            newArrayVector[i] = vector1.components[i] * vector2.components[i];
+        while (i < vector1.getSize() && i < vector2.getSize()) {
+            newVector.components[i] = vector1.components[i] * vector2.components[i];
             i++;
         }
-        return new Vector(newArrayVector);
+        return newVector;
     }
 }

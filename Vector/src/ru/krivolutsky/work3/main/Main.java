@@ -1,4 +1,4 @@
-package ru.krivolutsku.work3.main;
+package ru.krivolutsky.work3.main;
 
 import ru.krivolutsky.work3.classes.Vector;
 
@@ -69,7 +69,7 @@ public class Main {
 
         System.out.println("Введите индекс элемента, который нужно показать:");
         double element = vector3.getComponentByIndex(scanner.nextInt());
-        System.out.printf("Элемент по выбранному индексу: %f", element);
+        System.out.printf("Элемент по выбранному индексу: %f%n", element);
 
         vector3 = Vector.getScalarProduct(vector1, vector2);
         System.out.print("Скалярное произведение векторов");
