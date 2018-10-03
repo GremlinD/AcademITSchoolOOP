@@ -71,8 +71,8 @@ public class Main {
         double element = vector3.getComponentByIndex(scanner.nextInt());
         System.out.printf("Элемент по выбранному индексу: %f%n", element);
 
-        vector3 = Vector.getScalarProduct(vector1, vector2);
+        double scalarProduct = Vector.getScalarProduct(vector1, vector2);
         System.out.print("Скалярное произведение векторов");
-        System.out.println(vector3);
+        System.out.println(scalarProduct);
     }
 }
