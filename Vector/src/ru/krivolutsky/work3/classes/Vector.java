@@ -30,6 +30,13 @@ public class Vector {
         this.components = Arrays.copyOf(array, size);
     }
 
+    public Vector(int size, Vector vector) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Вектор не может иметь размерность меньше единицы.");
+        }
+        this.components = Arrays.copyOf(vector.components, size);
+    }
+
     public int getSize() {
         return this.components.length;
     }
@@ -59,7 +66,7 @@ public class Vector {
     public static Vector sum(Vector vector1, Vector vector2) {
         Vector newVector = new Vector(vector1);
         newVector.add(vector2);
-        return new Vector(newVector);
+        return newVector;
     }
 
     public void subtract(Vector vector2) {
@@ -74,7 +81,7 @@ public class Vector {
     public static Vector difference(Vector vector1, Vector vector2) {
         Vector newVector = new Vector(vector1);
         newVector.subtract(vector2);
-        return new Vector(newVector);
+        return newVector;
     }
 
     public double getLength() {
@@ -136,13 +143,11 @@ public class Vector {
         return hash;
     }
 
-    public static Vector getScalarProduct(Vector vector1, Vector vector2) {
-        Vector newVector = new Vector(Math.max(vector1.getSize(), vector2.getSize()));
-        int i = 0;
-        while (i < vector1.getSize() && i < vector2.getSize()) {
-            newVector.components[i] = vector1.components[i] * vector2.components[i];
-            i++;
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
+        double scalarProdukt = 0;
+        for (int i = 0; i < Math.min(vector1.getSize(), vector1.getSize()); i++) {
+            scalarProdukt += vector1.getComponentByIndex(i) * vector2.getComponentByIndex(i);
         }
-        return newVector;
+        return scalarProdukt;
     }
 }
