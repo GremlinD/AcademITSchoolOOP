@@ -144,10 +144,10 @@ public class Vector {
     }
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
-        double scalarProdukt = 0;
+        double scalarProduct = 0;
         for (int i = 0; i < Math.min(vector1.getSize(), vector1.getSize()); i++) {
-            scalarProdukt += vector1.getComponentByIndex(i) * vector2.getComponentByIndex(i);
+            scalarProduct += vector1.getComponentByIndex(i) * vector2.getComponentByIndex(i);
         }
-        return scalarProdukt;
+        return scalarProduct;
     }
 }
