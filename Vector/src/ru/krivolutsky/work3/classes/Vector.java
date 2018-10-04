@@ -145,8 +145,9 @@ public class Vector {
 
     public static double getScalarProduct(Vector vector1, Vector vector2) {
         double scalarProduct = 0;
-        for (int i = 0; i < Math.min(vector1.getSize(), vector1.getSize()); i++) {
-            scalarProduct += vector1.getComponentByIndex(i) * vector2.getComponentByIndex(i);
+        int minimumSize = Math.min(vector1.getSize(), vector1.getSize());
+        for (int i = 0; i < minimumSize; i++) {
+            scalarProduct += vector1.components[i] * vector2.components[i];
         }
         return scalarProduct;
     }

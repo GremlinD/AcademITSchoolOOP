@@ -107,24 +107,12 @@ public class Matrix {
         if (this.getVectorsSize() != this.getVectorsCount()) {
             throw new IllegalArgumentException("Матрица не является квадратной, вычисление определителя невозможно.");
         }
-        for (int i = this.getVectorsCount() - 1; i > 0; i--) {
-            int permutationsNumber = 0;
-            for (int j = 0; j < i; j++) {
-                if (this.components[j].getComponentByIndex(0) > this.components[j + 1].getComponentByIndex(0)) {
-                    permutationsNumber++;
-                    Vector tmp = new Vector(this.components[j]);
-                    this.components[j] = new Vector(this.components[j + 1]);
-                    this.components[j + 1] = new Vector(tmp);
+        for (int i = 0; i < this.getVectorsSize() - 1; i++) {
+            for (int j = i + 1; j < this.getVectorsCount(); j++) {
+                double factor = -(this.components[j].getComponentByIndex(i) / this.components[i].getComponentByIndex(i));
+                for (int k = 0; k < this.getVectorsSize(); k++) {
+                    this.components[j].setComponentByIndex(k, this.components[i].getComponentByIndex(k) * factor + this.components[j].getComponentByIndex(k));
                 }
-            }
-            if (permutationsNumber == 0) {
-                break;
-            }
-        }
-        for (int i = 0; i < this.getVectorsSize(); i++) {
-            double factor = -(this.components[i + 1].getComponentByIndex(i) / this.components[i].getComponentByIndex(i));
-            for (int j = i; j < this.getVectorsCount(); j++) {
-                this.components[j].setComponentByIndex(j, this.components[j].getComponentByIndex(j) + this.components[i].getComponentByIndex(j) * factor);
             }
         }
         double determinant = 1;
@@ -214,12 +202,15 @@ public class Matrix {
     }
 
     public static Matrix multiply(Matrix matrix1, Matrix matrix2) {
+        if (matrix1.getVectorsCount() != matrix2.getVectorsSize()) {
+            throw new IllegalArgumentException("Для умножения количество столбцов первой матрицы, должно быть равно количеству строк второй.");
+        }
         int width = Math.max(matrix1.getVectorsCount(), matrix2.getVectorsCount());
         int height = Math.max(matrix1.getVectorsSize(), matrix2.getVectorsSize());
         Matrix newMatrix = new Matrix(height, width);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                newMatrix.components[i].setComponentByIndex(j, Vector.getScalarProduct(matrix1.components[i], matrix2.getVectorColumnByIndex(i)));
+                newMatrix.components[i].setComponentByIndex(j, Vector.getScalarProduct(matrix1.components[i], matrix2.getVectorColumnByIndex(j)));
             }
         }
         return newMatrix;
