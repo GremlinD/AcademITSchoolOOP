@@ -103,6 +103,9 @@ public class Matrix {
         }
     }
 
+    /**
+     * Поиск определителя через приведение к реугольной матрице
+     */
     public double calculateDeterminant() {
         if (this.getVectorsSize() != this.getVectorsCount()) {
             throw new IllegalArgumentException("Матрица не является квадратной, вычисление определителя невозможно.");
