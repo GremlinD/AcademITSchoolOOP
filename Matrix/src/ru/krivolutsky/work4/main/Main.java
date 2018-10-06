@@ -24,19 +24,19 @@ public class Main {
         System.out.println(matrix1);
 
         System.out.print("Количество векторов в матрице:");
-        System.out.println(matrix1.getVectorsCount());
+        System.out.println(matrix1.getRowsCount());
         System.out.print("Количество элементов в векторах:");
-        System.out.println(matrix1.getVectorsSize());
+        System.out.println(matrix1.getRowsSize());
 
-        Vector vector = new Vector(matrix1.getVectorLineByIndex(1));
+        Vector vector = new Vector(matrix1.getRowByIndex(1));
         System.out.print("Вектор из строки матрицы:");
         System.out.println(vector);
 
-        vector = new Vector(matrix.getVectorColumnByIndex(2));
+        vector = new Vector(matrix.getColumnByIndex(2));
         System.out.print("Вектор из столбца матрицы:");
         System.out.println(vector);
 
-        matrix1.setVectorLineByIndex(1, vector);
+        matrix1.setRowByIndex(1, vector);
         System.out.print("Измененная матрица, с помощью вставки вектора: ");
         System.out.println(matrix1);
 
@@ -48,9 +48,9 @@ public class Main {
         System.out.print("Матрица умноженная на скаляр: ");
         System.out.println(matrix1);
 
-        matrix1.multiplyByVector(vector);
+        Matrix matrix3 = matrix1.multiplyByVector(vector);
         System.out.print("Матрица умноженная на вектор: ");
-        System.out.println(matrix1);
+        System.out.println(matrix3);
 
         System.out.print("Матирицы для сложения: ");
         System.out.println(matrix);
@@ -72,20 +72,18 @@ public class Main {
         System.out.print("Первая матрица после вычитания: ");
         System.out.println(saveMatrix);
 
-        matrix = new Matrix(new double[][]{{3, -3, -5, 8}, {-3, 2, 4, -6}, {2, -5, -7, 5}, {-4, 3, 5, -6}});
+        matrix = new Matrix(new double[][]{{0, -3, -5, 0}, {-3, 0, 4, -6}, {0, -5, 0, 5}, {-4, 3, 5, -6}});
         System.out.print("Определитель матрицы: ");
         System.out.println(matrix);
         System.out.print("Равен: ");
         System.out.println(matrix.calculateDeterminant());
 
-        matrix = new Matrix(new double[][]{{1,2,3},{5,6,7},{8,9,10},{11,12,13}});
-        matrix1 = new Matrix(new double[][]{{9,8,7,6},{5,4,3,2},{1,11,12,13}});
+        matrix = new Matrix(new double[][]{{1, 2, 3}, {5, 6, 7}, {8, -4, 10}, {11, 4, 13}, {4, -4, 0}});
+        matrix1 = new Matrix(new double[][]{{9, 8, 7, 6, 4}, {5, 4, 3, 5, -5}, {-11, 11, 12, 13, 0}});
         System.out.print("Результатом умножения матриц: ");
         System.out.println(matrix);
         System.out.println(matrix1);
         System.out.print("будет: ");
         System.out.println(Matrix.multiply(matrix, matrix1));
-
-
     }
 }
