@@ -7,39 +7,25 @@ import java.util.Scanner;
 
 public class Csv {
     public void readCsv() throws FileNotFoundException {
-        try(Scanner scanner = new Scanner(new FileInputStream("csv.txt"),"windows-1251"); PrintWriter writer = new PrintWriter("html.txt")){
+        try (Scanner scanner = new Scanner(new FileInputStream("csv.txt"), "windows-1251"); PrintWriter writer = new PrintWriter("html.txt")) {
             writer.println("table");
+            boolean isQuotationMark = false;
+            int i = 0;
             while (scanner.hasNextLine()) {
                 writer.println("tr");
-                String line = scanner.nextLine();
                 writer.println("td");
-                for (int i = 0; i < line.length(); i++) {
-                    if (line.charAt(i) != ',' || line.charAt(i)!='"') {
-                        writer.print(line.charAt(i));
-                        continue;
-                    }
-                    if (line.charAt(i) == '"' && line.charAt(i - 1) == ',') {
-                        writer.println();
-                        writer.println("/td");
-                        writer.println("td");
-                        i++;
-                        while (line.charAt(i) != '"'){
-                            writer.print(line.charAt(i));
-                            i++;
-                        }
-                        i+=2;
-                        continue;
-                    }
-                    if (line.charAt(i) == ',') {
-                        i++;
-                        writer.println();
-                        writer.println("td");
-                        writer.println("/td");
-                    }
+                String line = scanner.nextLine();
+                while (line.charAt(i) != '"' && line.charAt(i) != ',') {
+                    writer.print(line.charAt(i));
+                    i++;
                 }
-                writer.println("/td");
+                if (isQuotationMark = false && line.charAt(i) == '"') {
+                    isQuotationMark = true;
+                    i++;
+                    continue;
+                }
+
             }
-            writer.print("/table");
         }
     }
 }

@@ -26,7 +26,7 @@ public class Main {
         System.out.print("Количество векторов в матрице:");
         System.out.println(matrix1.getRowsCount());
         System.out.print("Количество элементов в векторах:");
-        System.out.println(matrix1.getRowsSize());
+        System.out.println(matrix1.getColumnsCount());
 
         Vector vector = new Vector(matrix1.getRowByIndex(1));
         System.out.print("Вектор из строки матрицы:");
@@ -40,6 +40,7 @@ public class Main {
         System.out.print("Измененная матрица, с помощью вставки вектора: ");
         System.out.println(matrix1);
 
+        matrix1 = new Matrix(new double[][]{{1, 2, 3, 4, 5}, {6, 7, 8, 9, 10}, {11, 12, 13, 14, 15}, {16, 17, 18, 19, 20}});
         matrix1.transpose();
         System.out.print("Транспонированная матрица: ");
         System.out.println(matrix1);
@@ -48,9 +49,11 @@ public class Main {
         System.out.print("Матрица умноженная на скаляр: ");
         System.out.println(matrix1);
 
-        Matrix matrix3 = matrix1.multiplyByVector(vector);
+        matrix1 = new Matrix(new double[][]{{2, 4, 0}, {-2, 1, 3}, {-1, 0, 1}});
+        vector = new Vector(new double[]{1, 2, -1});
+        Vector vector1 = matrix1.multiplyByVector(vector);
         System.out.print("Матрица умноженная на вектор: ");
-        System.out.println(matrix3);
+        System.out.println(vector1);
 
         System.out.print("Матирицы для сложения: ");
         System.out.println(matrix);
