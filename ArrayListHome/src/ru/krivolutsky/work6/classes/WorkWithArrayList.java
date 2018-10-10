@@ -21,6 +21,9 @@ public class WorkWithArrayList {
     }
 
     public static void deleteEvenNumbers(ArrayList<Integer> list) {
+        if (list.size() < 1){
+            throw new IllegalArgumentException("Список пуст, операция невозможна.");
+        }
         for (int i = list.size() - 1; i > 0; i--) {
             if (list.get(i) % 2 == 0) {
                 list.remove(i);
@@ -29,6 +32,9 @@ public class WorkWithArrayList {
     }
 
     public static ArrayList<Integer> createAListWithoutRepetitions(ArrayList<Integer> list) {
+        if (list.size() < 1){
+            throw new IllegalArgumentException("Список пуст, операция невозможна.");
+        }
         ArrayList<Integer> newList = new ArrayList<>();
         for (Integer aList : list) {
             if (newList.indexOf(aList) == -1) {
