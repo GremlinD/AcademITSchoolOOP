@@ -75,7 +75,12 @@ public class Main {
         System.out.print("Первая матрица после вычитания: ");
         System.out.println(saveMatrix);
 
-        matrix = new Matrix(new double[][]{{0, -3, -5, 0}, {-3, 0, 4, -6}, {0, -5, 0, 5}, {-4, 3, 5, -6}});
+        matrix = new Matrix(new double[][]{
+                {2, 4, 1, 1},
+                {0, 2, 1, 0},
+                {2, 1, 1, 3},
+                {4, 0, 2, 1}
+        });
         System.out.print("Определитель матрицы: ");
         System.out.println(matrix);
         System.out.print("Равен: ");
