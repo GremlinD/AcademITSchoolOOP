@@ -16,7 +16,7 @@ public class Main {
         System.out.println(list2.toString());
 
         list2 = new ArrayList<>(Arrays.asList(3, 6, 2, 7, 4, 3, 8, 2, 6, 5, 6, 4));
-        ArrayList<Integer> list3 = WorkWithArrayList.createAListWithoutRepetitioms(list2);
+        ArrayList<Integer> list3 = WorkWithArrayList.createAListWithoutRepetitions(list2);
         System.out.println(list3);
     }
 }
