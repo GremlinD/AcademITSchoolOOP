@@ -1,41 +1,42 @@
 package ru.krivolutsky.work5.classes;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-public class scvToHtml {
-    public void convertScvToHtml(String[] paths) throws FileNotFoundException {
-        if (paths.length < 2) {
-            throw new IllegalArgumentException("В аргуменах программы отсутствует один или более путей к файлам.");
-        }
-        if (!new File(paths[0]).exists()) {
-            throw new FileNotFoundException("Не найден файл с именем: " + paths[0]);
-        }
-
-        try (Scanner scanner = new Scanner(new FileInputStream(paths[0]), "windows-1251"); PrintWriter writer = new PrintWriter(paths[1])) {
+public class CsvToHtml {
+    public void convertScvToHtml(String pathCsv, String pathHtml) {
+        try (Scanner scanner = new Scanner(new FileInputStream(pathCsv), "windows-1251"); PrintWriter writer = new PrintWriter(pathHtml, StandardCharsets.UTF_8)) {
             if (!scanner.hasNextLine()) {
-                throw new IllegalArgumentException("Использование пустого файла невозможно.");
+                throw new IllegalArgumentException();
             }
-            writer.println("<table>");
+            writer.println("<!DOCTYPE html>");
+            writer.println("<html>");
+            writer.println(" <head>");
+            writer.println("  <meta charset=\"utf-8\" />");
+            writer.println("  <title>HTML Document</title>");
+            writer.println(" </head>");
+            writer.println(" <body>");
+            writer.println("  <table>");
             int quotationMarkCount = 0;
             while (scanner.hasNextLine()) {
                 int comma2 = 0;
                 if (quotationMarkCount % 2 == 0) {
-                    writer.println(" <tr>");
+                    writer.println("   <tr>");
                 }
                 String line = scanner.nextLine();
                 if (line.isEmpty()) {
-                    writer.println("  <td></td>");
-                    writer.println(" </tr>");
+                    writer.println("    <td></td>");
+                    writer.println("   </tr>");
                     continue;
                 }
                 int comma1;
                 while (comma2 < line.length()) {
                     if (quotationMarkCount % 2 == 0) {
-                        writer.print("  <td>");
+                        writer.print("    <td>");
                     } else if (line.charAt(comma2) != ',') {
                         writer.print("<br/>");
                     }
@@ -66,6 +67,11 @@ public class scvToHtml {
                                 quotationMarkCount++;
                                 break;
                             case ',':
+                                if (comma1 == 0 || i == line.length() - 1) {
+                                    writer.println("</td>");
+                                    writer.print("    <td>");
+                                    continue;
+                                }
                                 if (quotationMarkCount % 2 != 0 && quotationMarkCount != 0) {
                                     writer.print(line2.charAt(i));
                                 }
@@ -80,11 +86,19 @@ public class scvToHtml {
                     }
                 }
                 if (quotationMarkCount % 2 == 0) {
-                    writer.println(" </tr>");
+                    writer.println("   </tr>");
                     quotationMarkCount = 0;
                 }
             }
-            writer.print("</table>");
+            writer.println("  </table>");
+            writer.println(" </body>");
+            writer.println("</html>");
+        } catch (IllegalArgumentException i) {
+            System.out.println("Использование пустого файла невозможно.");
+        } catch (FileNotFoundException f) {
+            System.out.println("Не найден файл с именем: " + pathCsv);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
