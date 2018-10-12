@@ -76,10 +76,10 @@ public class Main {
         System.out.println(saveMatrix);
 
         matrix = new Matrix(new double[][]{
-                {2, 4, 1, 1},
-                {0, 2, 1, 0},
-                {2, 1, 1, 3},
-                {4, 0, 2, 1}
+                {6, 8, 5, 9},
+                {2, 4, 7, 6},
+                {7, 9, 8, 4},
+                {7, 3, 6, 8}
         });
         System.out.print("Определитель матрицы: ");
         System.out.println(matrix);

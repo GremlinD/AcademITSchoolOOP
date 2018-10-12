@@ -59,14 +59,14 @@ public class Matrix {
     }
 
     public Vector getRowByIndex(int index) {
-        if (index > this.getRowsCount() || index < 0) {
+        if (index >= this.getRowsCount() || index < 0) {
             throw new IndexOutOfBoundsException("Индекс не соответствует количеству векторов в матрице.");
         }
         return new Vector(this.rows[index]);
     }
 
     public void setRowByIndex(int index, Vector vector) {
-        if (index > this.getRowsCount() || index < 0) {
+        if (index >= this.getRowsCount() || index < 0) {
             throw new IndexOutOfBoundsException("Индекс не соответствует количеству векторов в матрице.");
         }
         if (vector.getSize() != this.rows[index].getSize()) {
@@ -76,7 +76,7 @@ public class Matrix {
     }
 
     public Vector getColumnByIndex(int index) {
-        if (index > this.getColumnsCount() || index < 0) {
+        if (index >= this.getColumnsCount() || index < 0) {
             throw new IndexOutOfBoundsException("Индекс не соответствует количеству векторов в матрице.");
         }
         Vector vector = new Vector(this.getRowsCount());
@@ -111,7 +111,7 @@ public class Matrix {
         for (int i = matrix.getRowsCount() - 1; i > 0; i--) {
             int permutationsNumber = 0;
             for (int j = 0; j < i; j++) {
-                if (matrix.rows[j].getComponentByIndex(0) < matrix.rows[j + 1].getComponentByIndex(0)) {
+                if (Math.abs(matrix.rows[j].getComponentByIndex(0)) < Math.abs(matrix.rows[j + 1].getComponentByIndex(0))) {
                     permutationsNumber++;
                     Vector tmp = matrix.rows[j];
                     matrix.rows[j] = matrix.rows[j + 1];
