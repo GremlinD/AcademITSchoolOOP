@@ -21,24 +21,18 @@ public class WorkWithArrayList {
     }
 
     public static void deleteEvenNumbers(ArrayList<Integer> list) {
-        if (list.size() < 1){
-            throw new IllegalArgumentException("Список пуст, операция невозможна.");
-        }
-        for (int i = list.size() - 1; i > 0; i--) {
+        for (int i = list.size() - 1; i >= 0; i--) {
             if (list.get(i) % 2 == 0) {
                 list.remove(i);
             }
         }
     }
 
-    public static ArrayList<Integer> createAListWithoutRepetitions(ArrayList<Integer> list) {
-        if (list.size() < 1){
-            throw new IllegalArgumentException("Список пуст, операция невозможна.");
-        }
+    public static ArrayList<Integer> createListWithoutRepetitions(ArrayList<Integer> list) {
         ArrayList<Integer> newList = new ArrayList<>();
-        for (Integer aList : list) {
-            if (newList.indexOf(aList) == -1) {
-                newList.add(aList);
+        for (Integer i : list) {
+            if (!newList.contains(i)) {
+                newList.add(i);
             }
         }
         return newList;
