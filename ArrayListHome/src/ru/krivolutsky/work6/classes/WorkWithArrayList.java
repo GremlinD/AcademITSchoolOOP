@@ -30,9 +30,9 @@ public class WorkWithArrayList {
 
     public static ArrayList<Integer> createListWithoutRepetitions(ArrayList<Integer> list) {
         ArrayList<Integer> newList = new ArrayList<>();
-        for (Integer i : list) {
-            if (!newList.contains(i)) {
-                newList.add(i);
+        for (Integer e : list) {
+            if (!newList.contains(e)) {
+                newList.add(e);
             }
         }
         return newList;
