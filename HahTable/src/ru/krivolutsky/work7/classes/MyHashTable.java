@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class HashTable<T> implements Collection<T> {
+public class MyHashTable<T> implements Collection<ArrayList> {
     private ArrayList[] hashTable = new ArrayList[10];
 
     @Override
@@ -34,29 +34,42 @@ public class HashTable<T> implements Collection<T> {
         return false;
     }
 
-    private class MyHashTableIterator implements Iterator<T> {
+    private class MyHashTableIterator {
         private int currentIndex = -1;
 
-        @Override
         public boolean hasNext() {
             return currentIndex + 1 < size();
         }
 
-        @Override
-        public T next() {
+        public ArrayList next() {
             ++currentIndex;
             return hashTable[currentIndex];
         }
     }
 
     @Override
-    public Iterator<T> iterator() {
-        return null;
+    public Iterator<ArrayList> iterator() {
+        return new Iterator<>() {
+            private int currentIndex = -1;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex + 1 < size();
+            }
+
+            @Override
+            public ArrayList next() {
+                ++currentIndex;
+                return hashTable[currentIndex];
+            }
+        };
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] object = new Object[hashTable.length];
+        System.arraycopy(hashTable, 0, object, 0, hashTable.length);
+        return object;
     }
 
     @Override
@@ -65,7 +78,7 @@ public class HashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T t) {
+    public boolean add(ArrayList t) {
         return false;
     }
 
@@ -80,7 +93,7 @@ public class HashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends ArrayList> c) {
         return false;
     }
 

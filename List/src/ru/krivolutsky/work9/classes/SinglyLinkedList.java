@@ -9,104 +9,87 @@ public class SinglyLinkedList<T> {
     }
 
     public T getHeadItem() {
+        if (count == 0) {
+            throw new NullPointerException("Список пуст");
+        }
         return head.getData();
     }
 
-    public T getByIndex(int index) {
-        try {
-            if (index < 0 || index > count - 1) {
-                throw new IndexOutOfBoundsException();
-            }
-            ListItem<T> p = head;
-            for (int i = 0; i < index; i++) {
-                p = p.getNext();
-            }
-            return p.getData();
-        } catch (IndexOutOfBoundsException i) {
-            System.out.println("Индекс выходит за границы списка");
+    private ListItem<T> reachItem(int index) {
+        ListItem<T> p = head;
+        for (int i = 0; i < index; i++) {
+            p = p.getNext();
         }
-        return null;
+        return p;
+    }
+
+    public T getByIndex(int index) {
+        if (index < 0 || index > count - 1) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
+        ListItem<T> p = this.reachItem(index);
+        return p.getData();
     }
 
     public T changeByIndex(int index, T item) {
-        try {
-            if (index < 0 || index > count - 1) {
-                throw new IndexOutOfBoundsException();
-            }
-            ListItem<T> p = head;
-            for (int i = 0; i < index; i++) {
-                p = p.getNext();
-            }
-            T t = p.getData();
-            p.setData(item);
-            return t;
-        } catch (IndexOutOfBoundsException i) {
-            System.out.println("Индекс выходит за границы списка");
+        if (index < 0 || index > count - 1) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
-        return null;
+        ListItem<T> p = this.reachItem(index);
+        T t = p.getData();
+        p.setData(item);
+        return t;
     }
 
     public T deleteByIndex(int index) {
-        try {
-            if (index < 0 || index > count - 1) {
-                throw new IndexOutOfBoundsException();
-            }
-            ListItem<T> p = head;
-            ListItem<T> prev = head;
-            for (int i = 0; i < index; i++) {
-                prev = p;
-                p = p.getNext();
-            }
-            T t = p.getData();
-            prev.setNext(p.getNext());
-            count--;
-            return t;
-        } catch (IndexOutOfBoundsException i) {
-            System.out.println("Индекс выходит за границы списка");
+        if (index < 0 || index > count - 1) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
-        return null;
+        ListItem<T> prev = this.reachItem(index - 1);
+        ListItem<T> p = prev.getNext();
+        T t = p.getData();
+        prev.setNext(p.getNext());
+        count--;
+        return t;
     }
 
-    public void setToStart(T item) {
+    public void addFirst(T item) {
         head = new ListItem<>(item, head);
         count++;
     }
 
-    public void setByIndex(int index, T item) {
-        try {
-            if (index < 0 || index > count) {
-                throw new IndexOutOfBoundsException();
-            }
-            ListItem<T> p = head;
-            ListItem<T> prev = head;
-            for (int i = 0; i < index; i++) {
-                prev = p;
-                p = p.getNext();
-            }
-            ListItem<T> li = new ListItem<>(item, p);
-            prev.setNext(li);
-            count++;
-        } catch (IndexOutOfBoundsException i) {
-            System.out.println("Индекс выходит за границы списка");
+    public void add(int index, T item) {
+        if (index < 0 || index > count) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
+        ListItem<T> prev = this.reachItem(index - 1);
+        ListItem<T> p = prev.getNext();
+        ListItem<T> li = new ListItem<>(item, p);
+        prev.setNext(li);
+        count++;
     }
 
     public boolean deleteByValue(T item) {
-        for (ListItem<T> p = head, prev = null; p != null; prev = p, p = p.getNext()) {
-            if (p.getData().equals(item)) {
-                if (prev == null) {
-                    head = p.getNext();
-                } else {
-                    prev.setNext(p.getNext());
+        if (this.head != null) {
+            for (ListItem<T> p = head, prev = null; p != null; prev = p, p = p.getNext()) {
+                if (p.getData().equals(item)) {
+                    if (prev == null) {
+                        head = p.getNext();
+                    } else {
+                        prev.setNext(p.getNext());
+                    }
+                    count--;
+                    return true;
                 }
-                count--;
-                return true;
             }
         }
         return false;
     }
 
-    public T deleteStartItem() {
+    public T deleteFirstItem() {
+        if (count == 0) {
+            throw new NullPointerException("Список пуст.");
+        }
         T t = head.getData();
         head = head.getNext();
         count--;
@@ -131,13 +114,19 @@ public class SinglyLinkedList<T> {
 
     public SinglyLinkedList<T> copy() {
         SinglyLinkedList<T> list = new SinglyLinkedList<>();
-        list.head = new ListItem<>(this.head.getData());
-        ListItem<T> li = list.head;
-        for (ListItem<T> p = head.getNext(); p != null; p = p.getNext()) {
-            li.setNext(new ListItem<>(p.getData(), p.getNext()));
-            li = li.getNext();
+        if (this.head != null) {
+            list.head = new ListItem<>(this.head.getData());
+            ListItem<T> li = list.head;
+            list.count++;
+            for (ListItem<T> p = head.getNext(); p != null; p = p.getNext()) {
+                li.setNext(new ListItem<>(p.getData(), p.getNext()));
+                li = li.getNext();
+                list.count++;
+            }
+            return list;
+        } else {
+            return list;
         }
-        return list;
     }
 
     public void print() {

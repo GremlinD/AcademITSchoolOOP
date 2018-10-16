@@ -68,9 +68,16 @@ public class MyArrayList<T> implements List<T> {
         return objects;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        if (a.length < length)
+            // Make a new array of a's runtime type, but my contents:
+            return (T1[]) Arrays.copyOf(items, length, a.getClass());
+        System.arraycopy(items, 0, a, 0, length);
+        if (a.length > length)
+            a[length] = null;
+        return a;
     }
 
     @Override
