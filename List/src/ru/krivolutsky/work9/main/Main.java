@@ -9,7 +9,7 @@ public class Main {
         try {
             linkedList.add(1, "eqw");
             linkedList.add(2, 4);
-            linkedList.add(-1, (byte) 3);
+            linkedList.add(3, (byte) 3);
 
             linkedList.addFirst("sad");
             linkedList.print();
@@ -50,7 +50,7 @@ public class Main {
             linkedList1.print();
         }
         catch (NullPointerException | IndexOutOfBoundsException exception) {
-            System.out.println(exception.toString());
+            System.out.println(exception.getMessage());
         }
     }
 }
