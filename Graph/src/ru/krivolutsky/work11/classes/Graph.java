@@ -39,7 +39,7 @@ public class Graph {
 
     public void Visit(int index) {
         if (graph.length == 0) {
-            
+
         }
         if (index < 0 || index >= graph.length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы графа.");

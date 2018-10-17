@@ -7,8 +7,9 @@ public class Main {
         SinglyLinkedList<Object> linkedList = new SinglyLinkedList<>();
         linkedList.addFirst(5);
         try {
+            linkedList.add(0, 1);
             linkedList.add(1, "eqw");
-            linkedList.add(2, 4);
+            linkedList.add(2, 5);
             linkedList.add(3, (byte) 3);
 
             linkedList.addFirst("sad");
@@ -28,7 +29,7 @@ public class Main {
             System.out.println(o);
             linkedList.print();
 
-            o = linkedList.deleteByIndex(2);
+            o = linkedList.deleteByIndex(0);
             System.out.print("Удаленный элемент: ");
             System.out.println(o);
             linkedList.print();
@@ -48,8 +49,7 @@ public class Main {
 
             SinglyLinkedList<Object> linkedList1 = linkedList.copy();
             linkedList1.print();
-        }
-        catch (NullPointerException | IndexOutOfBoundsException exception) {
+        } catch (NullPointerException | IndexOutOfBoundsException exception) {
             System.out.println(exception.getMessage());
         }
     }

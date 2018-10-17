@@ -5,18 +5,27 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BinaryTree {
-    private TreeNode<Integer> node = new TreeNode<>();
+    private TreeNode<Integer> node;
     private int elementCount = 0;
 
+    public BinaryTree(){
+    }
     public BinaryTree(int data) {
+        node = new TreeNode<>();
         node.data = data;
     }
 
-    public void insertNode(int data){
+    public void insert(int data){
+        if (node == null) {
+            node = new TreeNode<>();
+            node.data = data;
+            elementCount++;
+            return;
+        }
         TreeNode<Integer> tmp = node;
         while (true) {
             if (data < tmp.data) {
-                if (node.left != null){
+                if (tmp.left != null){
                     tmp = tmp.left;
                 } else {
                     tmp.left = new TreeNode<>();
@@ -63,63 +72,27 @@ public class BinaryTree {
     }
 
     public void deleteByValue(int data){
-        TreeNode<Integer> tmp = node;
-        TreeNode<Integer> prevDelete = node;
+        TreeNode<Integer> delete = node;
+        TreeNode<Integer> prevDelete = null;
+        TreeNode<Integer> min = null;
+        TreeNode<Integer> prevMin = null;
         while (true) {
-            if (tmp.data == data) {
-                if (tmp.equals(node)) {
-                    TreeNode<Integer> min = tmp.right;
-                    TreeNode<Integer> prev = tmp;
-                    while (min.left != null) {
-                        prev = min;
-                        min = min.left;
-                    }
+            if (data == delete.data) {
+                if (delete.left == null && delete.right == null) {
 
                 }
-                if (tmp.right != null && tmp.left != null) {
-                    TreeNode<Integer> min = tmp;
-                    TreeNode<Integer> prev = tmp;
-                    while (min.left != null) {
-                        prev = min;
-                        min = min.left;
-                    }
-                    if (min.right != null) {
-                        prev.left = min.right;
-                    } else {
-                        prev.left = null;
-                    }
-                    if (prevDelete.right.equals(tmp)) {
-                        prevDelete.right = min;
-                    } else {
-                        prevDelete.left = min;
-                    }
-                } else if (tmp.right == null && tmp.left == null) {
-                    assert prevDelete.right != null;
-                    if (prevDelete.right.equals(tmp)) {
-                        prevDelete.right = null;
-                    } else {
-                        prevDelete.left = null;
-                    }
-                } else if (tmp.right != null) {
-                    if (prevDelete.right.equals(tmp)) {
-                        prevDelete.right = tmp.right;
-                    } else {
-                        prevDelete.left= tmp.right;
-                    }
+            } else if (data < delete.data) {
+                if (delete.left != null) {
+                    delete = delete.left;
                 } else {
-                    if (prevDelete.left.equals(tmp)) {
-                        prevDelete.left = tmp.left;
-                    } else {
-                        prevDelete.right = tmp.left;
-                    }
+                    return;
                 }
-                break;
-            } else if (data < tmp.data) {
-                prevDelete = tmp;
-                tmp = tmp.left;
             } else {
-                prevDelete = tmp;
-                tmp = tmp.right;
+                if (delete.right != null) {
+                    delete = delete.right;
+                } else {
+                    return;
+                }
             }
         }
     }
