@@ -2,22 +2,27 @@ package ru.krivolutsky.work11.classes;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Consumer;
 
 public class Graph {
-    private byte[][] graph = new byte[][]{
+    private int[][] graph = new int[][]{
             {0, 1, 0, 0, 1},
             {1, 0, 1, 1, 0},
             {0, 1, 0, 0, 0},
             {0, 1, 0, 0, 1},
             {1, 0, 0, 1, 0}
     };
-    private boolean visit[] = new boolean[graph.length];
 
-    public void walkWide() {
+    public int getSize() {
+        return graph.length;
+    }
+
+    public void walkWide(Consumer<Integer> consumer) {
         Queue<Integer> queue = new LinkedList<>();
         if (graph.length != 0) {
             queue.add(0);
         }
+        boolean[] visit = new boolean[graph.length];
         while (queue.peek() != null) {
             if (visit[queue.element()]) {
                 queue.remove();
@@ -31,28 +36,24 @@ public class Graph {
                 }
             }
             visit[queue.element()] = true;
-            System.out.println(queue.element());
+            consumer.accept(queue.element());
             queue.remove();
         }
-        visit = new boolean[graph.length];
     }
 
-    public void Visit(int index) {
-        if (graph.length == 0) {
-
-        }
+    public void visit(int index, boolean[] visit, Consumer<Integer> consumer) {
         if (index < 0 || index >= graph.length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы графа.");
         }
         if (visit[index]) {
             return;
         }
-        System.out.println(index);
+        consumer.accept(index);
         visit[index] = true;
         for (int i = 0; i < graph.length; i++) {
             if (i != index) {
                 if (graph[index][i] == 1 && !visit[i]) {
-                    Visit(i);
+                    visit(i, visit, consumer);
                 }
             }
         }
