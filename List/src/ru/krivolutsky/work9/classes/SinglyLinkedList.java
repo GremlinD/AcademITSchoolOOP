@@ -113,10 +113,9 @@ public class SinglyLinkedList<T> {
             return;
         }
         ListItem<T> current = head;
-        ListItem<T> next;
         ListItem<T> prev = null;
         while (current != null) {
-            next = current.getNext();
+            ListItem<T> next = current.getNext();
             current.setNext(prev);
             prev = current;
             current = next;
@@ -132,7 +131,6 @@ public class SinglyLinkedList<T> {
         }
         list.head = new ListItem<>(this.head.getData());
         ListItem<T> li = list.head;
-        list.count++;
         for (ListItem<T> p = head.getNext(); p != null; p = p.getNext()) {
             li.setNext(new ListItem<>(p.getData(), p.getNext()));
             li = li.getNext();
