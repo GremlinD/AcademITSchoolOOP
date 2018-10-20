@@ -6,46 +6,38 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.function.Consumer;
 
-public class BinaryTree {
-    private TreeNode<Integer> node;
+public class BinaryTree<T extends Comparable<? super T>> {
+    private TreeNode<T> root;
     private int elementCount = 0;
 
     public BinaryTree() {
     }
 
-    public BinaryTree(int data) {
-        node = new TreeNode<>();
-        node.data = data;
+    public BinaryTree(T data) {
+        root = new TreeNode<>(data);
     }
 
-    public TreeNode<Integer> getFirst() {
-        return this.node;
-    }
-
-    public void insert(int data) {
-        if (node == null) {
-            node = new TreeNode<>();
-            node.data = data;
+    public void insert(T data) {
+        if (root == null) {
+            root = new TreeNode<>(data);
             elementCount++;
             return;
         }
-        TreeNode<Integer> tmp = node;
+        TreeNode<T> tmp = root;
         while (true) {
-            if (data < tmp.data) {
-                if (tmp.left != null) {
-                    tmp = tmp.left;
+            if (data.compareTo(tmp.getData()) < 0) {
+                if (tmp.getLeft() != null) {
+                    tmp = tmp.getLeft();
                 } else {
-                    tmp.left = new TreeNode<>();
-                    tmp.left.data = data;
+                    tmp.setLeft(new TreeNode<>(data));
                     elementCount++;
                     return;
                 }
             } else {
-                if (tmp.right != null) {
-                    tmp = tmp.right;
+                if (tmp.getRight() != null) {
+                    tmp = tmp.getRight();
                 } else {
-                    tmp.right = new TreeNode<>();
-                    tmp.right.data = data;
+                    tmp.setRight(new TreeNode<>(data));
                     elementCount++;
                     return;
                 }
@@ -53,20 +45,20 @@ public class BinaryTree {
         }
     }
 
-    public TreeNode<Integer> searchNode(int data) {
-        TreeNode<Integer> tmp = node;
+    public TreeNode<T> searchNode(T data) {
+        TreeNode<T> tmp = root;
         while (true) {
-            if (data == tmp.data) {
+            if (data.compareTo(tmp.getData()) == 0) {
                 return tmp;
-            } else if (data < tmp.data) {
-                if (tmp.left != null) {
-                    tmp = tmp.left;
+            } else if (data.compareTo(tmp.getData()) < 0) {
+                if (tmp.getLeft() != null) {
+                    tmp = tmp.getLeft();
                 } else {
                     return null;
                 }
             } else {
-                if (tmp.right != null) {
-                    tmp = tmp.right;
+                if (tmp.getRight() != null) {
+                    tmp = tmp.getRight();
                 } else {
                     return null;
                 }
@@ -78,165 +70,167 @@ public class BinaryTree {
         return elementCount;
     }
 
-    public void deleteByValue(int data) {
-        TreeNode<Integer> delete = node;
-        TreeNode<Integer> prevDelete = null;
+    public boolean deleteByValue(T data) {
+        TreeNode<T> delete = root;
+        TreeNode<T> prevDelete = null;
         while (true) {
-            if (data == delete.data) {
-                if (delete.left == null && delete.right == null) {
+            if (data == delete.getData()) {
+                if (delete.getLeft() == null && delete.getRight() == null) {
                     if (prevDelete != null) {
-                        if (prevDelete.right.equals(delete)) {
-                            prevDelete.right = null;
+                        if (prevDelete.getRight().equals(delete)) {
+                            prevDelete.setRight(null);
                         } else {
-                            prevDelete.left = null;
+                            prevDelete.setLeft(null);
                         }
                     } else {
-                        node = null;
+                        root = null;
                     }
                     elementCount--;
-                    return;
-                } else if (delete.left == null) {
+                    return true;
+                } else if (delete.getLeft() == null) {
                     if (prevDelete != null) {
-                        if (prevDelete.right.equals(delete)) {
-                            prevDelete.right = delete.right;
+                        if (prevDelete.getRight().equals(delete)) {
+                            prevDelete.setRight(delete.getRight());
                         } else {
-                            prevDelete.left = delete.right;
+                            prevDelete.setLeft(delete.getRight());
                         }
                     } else {
-                        node = node.right;
+                        root = root.getRight();
                     }
-                    return;
-                } else if (delete.right == null) {
+                    return true;
+                } else if (delete.getRight() == null) {
                     if (prevDelete != null) {
-                        if (prevDelete.right.equals(delete)) {
-                            prevDelete.right = delete.left;
+                        if (prevDelete.getRight().equals(delete)) {
+                            prevDelete.setRight(delete.getLeft());
                         } else {
-                            prevDelete.left = delete.left;
+                            prevDelete.setLeft(delete.getLeft());
                         }
                     } else {
-                        node = node.left;
+                        root = root.getLeft();
                     }
                     elementCount--;
-                    return;
+                    return true;
                 } else {
-                    TreeNode<Integer> min = delete.right;
-                    TreeNode<Integer> prevMin = null;
-                    while (min.left != null) {
+                    TreeNode<T> min = delete.getRight();
+                    TreeNode<T> prevMin = null;
+                    while (min.getLeft() != null) {
                         prevMin = min;
-                        min = min.left;
+                        min = min.getLeft();
                     }
-                    TreeNode<Integer> node = min;
-                    if (min.right == null) {
+                    TreeNode<T> node = min;
+                    if (min.getRight() == null) {
                         if (prevMin != null) {
-                            if (prevMin.left.equals(min)) {
-                                prevMin.left = null;
+                            if (prevMin.getLeft().equals(min)) {
+                                prevMin.setLeft(null);
                             } else {
-                                prevMin.right = null;
+                                prevMin.setRight(null);
                             }
                         } else if (prevDelete != null) {
-                            if (prevDelete.data < delete.data) {
-                                prevDelete.right = null;
+                            if (prevDelete.getData().compareTo(delete.getData()) < 0) {
+                                prevDelete.setRight(null);
                             } else {
-                                prevDelete.left = null;
+                                prevDelete.setLeft(null);
                             }
                         } else {
-                            min.left = delete.left;
-                            this.node = min;
+                            min.setLeft(delete.getLeft());
+                            this.root = min;
                         }
                     } else {
                         if (prevMin != null) {
-                            if (prevMin.left.equals(min)) {
-                                prevMin.left = min.right;
+                            if (prevMin.getLeft().equals(min)) {
+                                prevMin.setLeft(min.getRight());
                             } else {
-                                prevMin.right = min.right;
+                                prevMin.setRight(min.getRight());
                             }
                         } else {
                             if (prevDelete != null) {
-                                prevDelete.right = delete.right;
+                                prevDelete.setRight(delete.getRight());
                             } else {
-                                min.left = delete.left;
-                                this.node = min;
+                                min.setLeft(delete.getLeft());
+                                this.root = min;
                             }
                         }
                     }
                     if (prevDelete != null) {
-                        if (prevDelete.data <= delete.data) {
-                            if (!Objects.equals(min, delete.right)) {
-                                min.right = delete.right;
+                        if (prevDelete.getData().compareTo(delete.getData()) <= 0) {
+                            if (!Objects.equals(min, delete.getRight())) {
+                                min.setRight(delete.getRight());
                             }
-                            min.left = delete.left;
-                            prevDelete.right = node;
+                            min.setLeft(delete.getLeft());
+                            prevDelete.setRight(node);
                         } else {
-                            if (!min.equals(delete.right)) {
-                                min.right = delete.right;
+                            if (!min.equals(delete.getRight())) {
+                                min.setRight(delete.getRight());
                             }
-                            min.left = delete.left;
-                            prevDelete.left = node;
+                            min.setLeft(delete.getLeft());
+                            prevDelete.setLeft(node);
                         }
                     } else {
-                        min.left = this.node.left;
-                        min.right = this.node.right;
-                        this.node = min;
+                        min.setLeft(this.root.getLeft());
+                        min.setRight(this.root.getRight());
+                        this.root = min;
                     }
                 }
                 elementCount--;
-                return;
-            } else if (data < delete.data) {
-                if (delete.left != null) {
+                return true;
+            } else if (data.compareTo(delete.getData()) < 0) {
+                if (delete.getLeft() != null) {
                     prevDelete = delete;
-                    delete = delete.left;
+                    delete = delete.getLeft();
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                if (delete.right != null) {
+                if (delete.getRight() != null) {
                     prevDelete = delete;
-                    delete = delete.right;
+                    delete = delete.getRight();
                 } else {
-                    return;
+                    return false;
                 }
             }
         }
     }
 
-    public void walkWide(Consumer<Integer> consumer) {
-        Queue<TreeNode<Integer>> queue = new LinkedList<>();
-        queue.add(node);
+    public void walkWide(Consumer<T> consumer) {
+        Queue<TreeNode<T>> queue = new LinkedList<>();
+        queue.add(root);
         while (queue.peek() != null) {
-            TreeNode<Integer> treeNode = queue.element();
-            consumer.accept(queue.element().data);
-            queue.remove();
-            if (treeNode.left != null) {
-                queue.add(treeNode.left);
+            TreeNode<T> treeNode = queue.element();
+            consumer.accept(queue.remove().getData());
+            if (treeNode.getLeft() != null) {
+                queue.add(treeNode.getLeft());
             }
-            if (treeNode.right != null) {
-                queue.add(treeNode.right);
+            if (treeNode.getRight() != null) {
+                queue.add(treeNode.getRight());
             }
         }
     }
 
-    public void circumventDepthWithRecursion(TreeNode<Integer> node, Consumer<Integer> consumer) {
-        consumer.accept(node.data);
-        if (node.left != null) {
-            circumventDepthWithRecursion(node.left, consumer);
+    public void circumventDepthWithRecursion(Consumer<T> consumer) {
+        circumventDepthWithRecursion(this.root, consumer);
+    }
+
+    private void circumventDepthWithRecursion(TreeNode<T> node, Consumer<T> consumer) {
+        consumer.accept(node.getData());
+        if (node.getLeft() != null) {
+            circumventDepthWithRecursion(node.getLeft(), consumer);
         }
-        if (node.right != null) {
-            circumventDepthWithRecursion(node.right, consumer);
+        if (node.getRight() != null) {
+            circumventDepthWithRecursion(node.getRight(), consumer);
         }
     }
 
-    public void bypassInDepth(Consumer<Integer> consumer) {
-        Deque<TreeNode<Integer>> stack = new LinkedList<>();
-        stack.add(node);
+    public void bypassInDepth(Consumer<T> consumer) {
+        Deque<TreeNode<T>> stack = new LinkedList<>();
+        stack.add(root);
         while (stack.peekLast() != null) {
-            TreeNode<Integer> treeNode = stack.getLast();
-            consumer.accept(stack.getLast().data);
-            stack.removeLast();
-            if (treeNode.right != null) {
-                stack.addLast(treeNode.right);
+            TreeNode<T> treeNode = stack.getLast();
+            consumer.accept(stack.removeLast().getData());
+            if (treeNode.getRight() != null) {
+                stack.addLast(treeNode.getRight());
             }
-            if (treeNode.left != null) {
-                stack.addLast(treeNode.left);
+            if (treeNode.getLeft() != null) {
+                stack.addLast(treeNode.getLeft());
             }
         }
     }

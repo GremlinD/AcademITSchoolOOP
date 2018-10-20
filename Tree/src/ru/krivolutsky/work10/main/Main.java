@@ -7,9 +7,9 @@ import java.util.function.Consumer;
 
 public class Main {
     public static void main(String[] args) {
-        BinaryTree firstTree = new BinaryTree(8);
+        BinaryTree<Integer> firstTree = new BinaryTree<>(8);
         System.out.println(firstTree.getCount());
-        BinaryTree tree = new BinaryTree();
+        BinaryTree<Integer> tree = new BinaryTree<>();
         tree.insert(10);
         tree.insert(5);
 
@@ -26,17 +26,18 @@ public class Main {
         tree.insert(9);
 
         TreeNode<Integer> treeNode = tree.searchNode(10);
-        System.out.println(treeNode.data);
+        System.out.println(treeNode.getData());
         System.out.println(tree.getCount());
 
-        tree.deleteByValue(11);
+        boolean isDelete = tree.deleteByValue(11);
+        System.out.println(isDelete);
 
         Consumer<Integer> consumer = System.out::println;
         tree.walkWide(consumer);
 
         System.out.println();
 
-        tree.circumventDepthWithRecursion(tree.getFirst(), consumer);
+        tree.circumventDepthWithRecursion(consumer);
 
         System.out.println();
 
