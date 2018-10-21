@@ -27,9 +27,8 @@ public class Graph {
                     }
                 }
             }
-            int element = queue.element();
+            int element = queue.remove();
             if (visit[element]) {
-                queue.remove();
                 continue;
             }
             for (int i = 0; i < graph.length; i++) {
@@ -42,7 +41,6 @@ public class Graph {
             visit[element] = true;
             visitCount++;
             consumer.accept(element);
-            queue.remove();
         }
     }
 
@@ -60,22 +58,20 @@ public class Graph {
     }
 
     private int visit(int index, boolean[] visit, Consumer<Integer> consumer, int visitCount) {
-        if (index < 0 || index >= graph.length) {
-            throw new IndexOutOfBoundsException("Индекс выходит за границы графа.");
-        }
+        int count = visitCount;
         if (visit[index]) {
-            return visitCount;
+            return count;
         }
         consumer.accept(index);
         visit[index] = true;
-        visitCount++;
+        count++;
         for (int i = 0; i < graph.length; i++) {
             if (i != index) {
                 if (graph[index][i] == 1 && !visit[i]) {
-                    visitCount = visit(i, visit, consumer, visitCount);
+                    count = visit(i, visit, consumer, count);
                 }
             }
         }
-        return visitCount;
+        return count;
     }
 }
