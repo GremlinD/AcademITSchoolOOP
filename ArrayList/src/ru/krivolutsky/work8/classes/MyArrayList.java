@@ -3,13 +3,23 @@ package ru.krivolutsky.work8.classes;
 import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
-    private T[] items;
+    private Object[] items;
     private int length;
+    private int itemsCount = 0;
     private int modCount = 0;
+
+    public MyArrayList() {
+
+    }
+
+    public MyArrayList(int capacity) {
+        items = new Object[capacity];
+        length = capacity;
+    }
 
     @Override
     public int size() {
-        return length;
+        return itemsCount;
     }
 
     @Override
@@ -27,38 +37,28 @@ public class MyArrayList<T> implements List<T> {
         return true;
     }
 
-    private class MyArrayIterator implements Iterator<T> {
-        private int currentIndex = -1;
-        int mc = modCount;
+    /*TODO
 
-        @Override
-        public boolean hasNext() {
-            return currentIndex + 1 < size();
-        }
-
-        @Override
-        public T next() {
-            ++currentIndex;
-            try {
-                if (mc != modCount) {
-                    throw new ConcurrentModificationException();
-                }
-                if (currentIndex == length) {
-                    throw new NoSuchElementException();
-                }
-                return items[currentIndex];
-            } catch (ConcurrentModificationException c) {
-                System.out.println("Список был изменен.");
-            } catch (NoSuchElementException n) {
-                System.out.println("Список закончился.");
-            }
-            return null;
-        }
-    }
-
+     */
     @Override
     public Iterator<T> iterator() {
-        return new MyArrayIterator();
+        /*
+        return new Iterator<ArrayList>() {
+            private int currentIndex = -1;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex + 1 < size();
+            }
+
+            @Override
+            public ArrayList next() {
+                ++currentIndex;
+                return hashTable[currentIndex];
+            }
+        };
+        */
+        return null;
     }
 
     @Override
@@ -82,14 +82,8 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        for (int i = 0; i < length; i++) {
-            if (items[i].equals(t)) {
-                this.add(length, t);
-                modCount++;
-                return true;
-            }
-        }
-        return false;
+        this.add(itemsCount, t);
+        return true;
     }
 
     @Override
@@ -181,32 +175,35 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private T items(int index) {
+        return (T) items[index];
+    }
+
     @Override
     public T get(int index) {
-        return items[index];
+        return items(index);
     }
 
     @Override
     public T set(int index, T element) {
-        T t = items[index];
+        T t = items(index);
         items[index] = element;
         return t;
     }
 
     @Override
     public void add(int index, T element) {
-        if (length >= items.length) {
+        if (itemsCount >= items.length - 1) {
             increaseCapacity();
         }
-        if (index == length) {
-            items[length] = element;
-            ++length;
-        } else {
-            for (int i = length; i > index; i--) {
-                items[length] = items[length - 1];
-            }
+        if (index == length - 1) {
             items[index] = element;
-            ++length;
+            ++itemsCount;
+        } else {
+            if (itemsCount - index >= 0) System.arraycopy(items, index, items, index + 1, itemsCount - index);
+            items[index] = element;
+            ++itemsCount;
         }
         modCount++;
     }
@@ -217,7 +214,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        T t = items[index];
+        T t = items(index);
         if (length - 1 - index >= 0) System.arraycopy(items, index + 1, items, index, length - 1 - index);
         length--;
         modCount++;

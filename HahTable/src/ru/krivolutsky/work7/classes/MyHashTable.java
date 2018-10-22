@@ -34,22 +34,9 @@ public class MyHashTable<T> implements Collection<ArrayList> {
         return false;
     }
 
-    private class MyHashTableIterator {
-        private int currentIndex = -1;
-
-        public boolean hasNext() {
-            return currentIndex + 1 < size();
-        }
-
-        public ArrayList next() {
-            ++currentIndex;
-            return hashTable[currentIndex];
-        }
-    }
-
     @Override
     public Iterator<ArrayList> iterator() {
-        return new Iterator<>() {
+        return new Iterator<ArrayList>() {
             private int currentIndex = -1;
 
             @Override
