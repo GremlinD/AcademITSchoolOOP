@@ -127,6 +127,9 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
         if (c.size() == 0) {
             return false;
         }
@@ -174,11 +177,17 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
         return items(index);
     }
 
     @Override
     public T set(int index, T element) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
         T t = items(index);
         items[index] = element;
         return t;
@@ -186,6 +195,9 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
         if (length == items.length) {
             increaseCapacity();
         }
@@ -198,6 +210,9 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
+        if (index < 0 || index >= length) {
+            throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
+        }
         T t = items(index);
         if (index < length - 1) {
             System.arraycopy(items, index + 1, items, index, length - index - 1);
@@ -209,7 +224,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < length; i++) {
-            if (o.equals(items[i])) {
+            if (items[i].equals(o)) {
                 return i;
             }
         }
@@ -219,7 +234,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = length - 1; i >= 0; i--) {
-            if (o.equals(items[i])) {
+            if (items[i].equals(o)) {
                 return i;
             }
         }

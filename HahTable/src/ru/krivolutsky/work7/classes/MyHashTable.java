@@ -3,30 +3,31 @@ package ru.krivolutsky.work7.classes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
-public class MyHashTable<T> implements Collection<ArrayList> {
-    private ArrayList[] hashTable = new ArrayList[10];
+public class MyHashTable<T> implements Collection<T> {
+    private ArrayList[] lists = new ArrayList[10];
+
+    private int calculateHash(Object o) {
+        return Math.abs(o.hashCode() % lists.length);
+    }
 
     @Override
     public int size() {
-        return hashTable.length;
+        return lists.length;
     }
 
     @Override
     public boolean isEmpty() {
-        return hashTable.length > 0;
-    }
-
-    private int calculateHashCode(Object o) {
-        return Math.abs(o.hashCode() % hashTable.length);
+        return lists.length > 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        int hash = calculateHashCode(o);
-        if (hash < hashTable.length && hashTable[hash] != null) {
-            for (Object object : hashTable[hash]) {
-                if (o.equals(object)) {
+        int hash = calculateHash(o);
+        if (lists[hash] != null) {
+            for (Object object : lists) {
+                if (object.equals(o)){
                     return true;
                 }
             }
@@ -35,28 +36,13 @@ public class MyHashTable<T> implements Collection<ArrayList> {
     }
 
     @Override
-    public Iterator<ArrayList> iterator() {
-        return new Iterator<ArrayList>() {
-            private int currentIndex = -1;
-
-            @Override
-            public boolean hasNext() {
-                return currentIndex + 1 < size();
-            }
-
-            @Override
-            public ArrayList next() {
-                ++currentIndex;
-                return hashTable[currentIndex];
-            }
-        };
+    public Iterator<T> iterator() {
+        return null;
     }
 
     @Override
     public Object[] toArray() {
-        Object[] object = new Object[hashTable.length];
-        System.arraycopy(hashTable, 0, object, 0, hashTable.length);
-        return object;
+        return new Object[0];
     }
 
     @Override
@@ -65,7 +51,7 @@ public class MyHashTable<T> implements Collection<ArrayList> {
     }
 
     @Override
-    public boolean add(ArrayList t) {
+    public boolean add(T t) {
         return false;
     }
 
@@ -80,7 +66,7 @@ public class MyHashTable<T> implements Collection<ArrayList> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends ArrayList> c) {
+    public boolean addAll(Collection<? extends T> c) {
         return false;
     }
 
@@ -96,6 +82,8 @@ public class MyHashTable<T> implements Collection<ArrayList> {
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < this.lists.length; i++) {
+            lists[i] = null;
+        }
     }
 }
