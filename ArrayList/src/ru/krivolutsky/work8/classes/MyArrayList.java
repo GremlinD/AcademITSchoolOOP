@@ -19,7 +19,7 @@ public class MyArrayList<T> implements List<T> {
         return (T) items[index];
     }
 
-    private  void increaseCapacity() {
+    private void increaseCapacity() {
         items = Arrays.copyOf(items, items.length * 2);
     }
 
@@ -49,12 +49,12 @@ public class MyArrayList<T> implements List<T> {
         return false;
     }
 
-    private class MyArrayListIterator implements Iterator<T>{
+    private class MyArrayListIterator implements Iterator<T> {
         private int currentIndex = -1;
 
         @Override
         public boolean hasNext() {
-            return currentIndex+1 < length;
+            return currentIndex + 1 < length;
         }
 
         @Override
@@ -127,7 +127,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        if (index < 0 || index >= length) {
+        if (index < 0 || index > length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
         if (c.size() == 0) {
@@ -195,7 +195,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T element) {
-        if (index < 0 || index >= length) {
+        if (index < 0 || index > length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
         if (length == items.length) {
