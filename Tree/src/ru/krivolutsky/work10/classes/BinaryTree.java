@@ -1,20 +1,18 @@
 package ru.krivolutsky.work10.classes;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.Consumer;
 
-public class BinaryTree<T extends Comparable<? super T>> {
+public class BinaryTree<T> {
     private TreeNode<T> root;
     private int elementCount = 0;
+    private Comparator<T> comparator;
 
     public BinaryTree() {
     }
 
-    public BinaryTree(T data) {
-        root = new TreeNode<>(data);
+    public BinaryTree(Comparator<T> comparator) {
+        this.comparator = comparator;
     }
 
     public void insert(T data) {
@@ -24,8 +22,11 @@ public class BinaryTree<T extends Comparable<? super T>> {
             return;
         }
         TreeNode<T> tmp = root;
+
         while (true) {
-            if (data.compareTo(tmp.getData()) < 0) {
+            if (comparator.compare(data, tmp.getData()) < 0) {
+                @SuppressWarnings("unchecked")
+                (Comparable <? super T >) data.compareTo(tmp.getData());
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {

@@ -1,6 +1,6 @@
 package ru.krivolutsky.work10.classes;
 
-public class TreeNode<T extends Comparable<? super T>> implements Comparable<TreeNode<T>> {
+public class TreeNode<T> {
     private TreeNode<T> left;
     private TreeNode<T> right;
     private T data;
@@ -31,10 +31,5 @@ public class TreeNode<T extends Comparable<? super T>> implements Comparable<Tre
 
     void setRight(TreeNode<T> right) {
         this.right = right;
-    }
-
-    @Override
-    public int compareTo(TreeNode<T> o) {
-        return data.compareTo(o.data);
     }
 }
