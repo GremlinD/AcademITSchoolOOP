@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 public class CsvToHtml {
     public void convertScvToHtml(String pathCsv, String pathHtml) {
-        try (Scanner scanner = new Scanner(new FileInputStream(pathCsv), "windows-1251"); PrintWriter writer = new PrintWriter(pathHtml, StandardCharsets.UTF_8)) {
+        try (Scanner scanner = new Scanner(new FileInputStream(pathCsv), "windows-1251");
+             PrintWriter writer = new PrintWriter(pathHtml, String.valueOf(StandardCharsets.UTF_8))) {
             if (!scanner.hasNextLine()) {
-                throw new IllegalArgumentException();
+                System.out.println("Файл пуст.");
+                return;
             }
             writer.println("<!DOCTYPE html>");
             writer.println("<html>");
@@ -93,12 +95,10 @@ public class CsvToHtml {
             writer.println("  </table>");
             writer.println(" </body>");
             writer.println("</html>");
-        } catch (IllegalArgumentException i) {
-            System.out.println("Использование пустого файла невозможно.");
         } catch (FileNotFoundException f) {
             System.out.println("Не найден файл с именем: " + pathCsv);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
