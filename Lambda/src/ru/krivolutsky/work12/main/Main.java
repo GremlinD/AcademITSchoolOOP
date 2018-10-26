@@ -21,7 +21,7 @@ public class Main {
         people.add(new Person("e", 83));
         people.add(new Person("q", 56));
 
-        List<Person> uniquePeople = people.stream().distinct().collect(Collectors.toList());
+        List<Person> uniquePeople = people.stream().distinct().collect(Collectors.toList()); //Спрашивал у вас, будет ли эта строка работать, вы ответили да. Не смог понять почему список е изменяется.
         System.out.println(uniquePeople.stream().map(Person::getName).collect(Collectors.joining(", ", "Имена: ", ".")));
 
         List<Person> minor = people.stream().filter(p -> p.getAge() < 18).collect(Collectors.toList());
@@ -29,7 +29,7 @@ public class Main {
 
         Map<String, Double> averageByNames = people.stream().collect(Collectors.groupingBy(Person::getName, Collectors.averagingDouble(Person::getAge)));
 
-        List<Person> people2045 = people.stream().filter(p -> p.getAge() > 18 && p.getAge() < 45).sorted((p1, p2) -> p2.getAge()-p1.getAge()).collect(Collectors.toList());
-        System.out.println(people2045.stream().map(Person::getName).collect(Collectors.joining(", ", "Возраст: ", ".")));
+        List<Person> from20To45 = people.stream().filter(p -> p.getAge() > 18 && p.getAge() < 45).sorted((p1, p2) -> p2.getAge()-p1.getAge()).collect(Collectors.toList());
+        System.out.println(from20To45.stream().map(Person::getName).collect(Collectors.joining(", ", "Возраст: ", ".")));
     }
 }
