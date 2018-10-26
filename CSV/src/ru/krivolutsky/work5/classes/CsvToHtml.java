@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class CsvToHtml {
-    public void convertScvToHtml(String pathCsv, String pathHtml) {
+    public void convertCsvToHtml(String pathCsv, String pathHtml) {
         try (Scanner scanner = new Scanner(new FileInputStream(pathCsv), "windows-1251");
              PrintWriter writer = new PrintWriter(pathHtml, String.valueOf(StandardCharsets.UTF_8))) {
             if (!scanner.hasNextLine()) {
