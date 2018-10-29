@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public class MyHashTable<T> implements Collection<T> {
-    private ArrayList[] lists = new ArrayList[30];
+    private ArrayList<T>[] lists = new ArrayList[30];
+    private int count;
 
     private int calculateHash(Object o) {
         return Math.abs(o.hashCode() % lists.length);
@@ -14,23 +15,19 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public int size() {
-        return lists.length;
+        return count;
     }
 
     @Override
     public boolean isEmpty() {
-        return lists.length > 0;
+        return count > 0;
     }
 
     @Override
     public boolean contains(Object o) {
         int hash = calculateHash(o);
         if (lists[hash] != null) {
-            for (Object object : lists[hash]) {
-                if (object.equals(o)) {
-                    return true;
-                }
-            }
+            return lists[hash].contains(o);
         }
         return false;
     }
@@ -41,11 +38,12 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     private class MyArrayListIterator implements Iterator<T> {
+        private int currentList = 0;
         private int currentIndex = -1;
 
         @Override
         public boolean hasNext() {
-            return currentIndex + 1 < lists.length;
+            return currentIndex + 1 < count;
         }
 
         @Override
@@ -135,8 +133,8 @@ public class MyHashTable<T> implements Collection<T> {
         if (c.size() == 0) {
             return false;
         }
-        for (Object o : c) {
-            this.add(tableObject(o));
+        for (T t : c) {
+            this.add(t);
         }
         return true;
     }
