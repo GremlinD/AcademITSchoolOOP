@@ -1,7 +1,5 @@
 package ru.krivolutsky.work12.classes;
 
-import java.util.Objects;
-
 public class Person {
     private String name;
     private int age;
@@ -25,20 +23,5 @@ public class Person {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (o == null || o.getClass() != this.getClass()) {
-            return false;
-        }
-
-        Person person = (Person) o;
-
-        return Objects.equals(person.name, name);
     }
 }
