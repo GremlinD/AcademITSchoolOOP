@@ -8,6 +8,7 @@ import java.util.Iterator;
 public class MyHashTable<T> implements Collection<T> {
     private ArrayList<T>[] lists = new ArrayList[30];
     private int count;
+    private int modCount;
 
     private int calculateHash(Object o) {
         return Math.abs(o.hashCode() % lists.length);
@@ -25,6 +26,9 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object o) {
+        if (o == null) {
+            return false;
+        }
         int hash = calculateHash(o);
         if (lists[hash] != null) {
             return lists[hash].contains(o);
@@ -33,13 +37,16 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private T lists(int index) {
-        return (T) lists[index];
+    private T lists(Object o) {
+        return (T) o;
     }
 
+    /*ToDo
+    Дописать ошибку при изменении списка
+     */
     private class MyArrayListIterator implements Iterator<T> {
-        private int currentList = 0;
         private int currentIndex = -1;
+        private int currentList = 0;
 
         @Override
         public boolean hasNext() {
@@ -48,8 +55,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public T next() {
-            ++currentIndex;
-            return lists(currentIndex);
+
         }
     }
 
@@ -60,11 +66,22 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] objects = new Object[lists.length];
-        System.arraycopy(lists, 0, objects, 0, lists.length);
+        Object[] objects = new Object[count];
+        int i = 0;
+        for (ArrayList a : lists) {
+            if (a != null) {
+                for (Object o : a) {
+                    objects[i] = o;
+                    i++;
+                }
+            }
+        }
         return objects;
     }
 
+    /*todo
+    разобраться с функцией
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
@@ -77,19 +94,26 @@ public class MyHashTable<T> implements Collection<T> {
         return a;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean add(T t) {
+        if (t == null) {
+            return false;
+        }
         int hash = calculateHash(t);
         if (lists[hash] == null) {
             lists[hash] = new ArrayList<>();
         }
         lists[hash].add(t);
+        count++;
+        modCount++;
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
+        if (o == null) {
+            return false;
+        }
         int hash = calculateHash(o);
         if (lists[hash] != null) {
             for (Object object : lists[hash]) {
@@ -97,6 +121,8 @@ public class MyHashTable<T> implements Collection<T> {
                     lists[hash].remove(o);
                     if (lists[hash].size() == 0) {
                         lists[hash] = null;
+                        count--;
+                        modCount++;
                     }
                     return true;
                 }
@@ -110,10 +136,11 @@ public class MyHashTable<T> implements Collection<T> {
         if (c.size() == 0) {
             return false;
         }
+
         for (Object o : c) {
             int hash = calculateHash(o);
             if (lists[hash] != null) {
-                if (!lists[hash].contains(o)) {
+                if (!lists[hash].contains(lists(o))) {
                     return false;
                 }
             } else {
@@ -121,11 +148,6 @@ public class MyHashTable<T> implements Collection<T> {
             }
         }
         return true;
-    }
-
-    @SuppressWarnings("unchecked")
-    private T tableObject(Object o) {
-        return (T) o;
     }
 
     @Override
@@ -148,8 +170,8 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object o : c) {
             int hash = calculateHash(o);
             if (lists[hash] != null) {
-                while (lists[hash].contains(o)) {
-                    lists[hash].remove(o);
+                while (lists[hash].contains(lists(o))) {
+                    lists[hash].remove(lists(o));
                     isChanged = true;
                 }
             }
