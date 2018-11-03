@@ -6,7 +6,6 @@ public class Main {
     public static void main(String[] args) {
         MyHashTable<Object> hashTable2 = new MyHashTable<>();
         hashTable2.add(12);
-        hashTable2.add("qwe");
         hashTable2.add("asd");
 
         MyHashTable<Object> hashTable = new MyHashTable<>();
@@ -31,7 +30,13 @@ public class Main {
 
         System.out.println(hashTable.containsAll(hashTable2));
 
+        System.out.println(hashTable.removeAll(hashTable2));
 
-        System.out.println();
+        System.out.println(hashTable);
+
+        System.out.println(hashTable.retainAll(hashTable2));
+
+
+        System.out.println(hashTable);
     }
 }

@@ -1,11 +1,9 @@
 package ru.krivolutsky.work7.classes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
+    @SuppressWarnings("unchecked")
     private ArrayList<T>[] lists = new ArrayList[30];
     private int count;
     private int modCount;
@@ -45,17 +43,38 @@ public class MyHashTable<T> implements Collection<T> {
     Дописать ошибку при изменении списка
      */
     private class MyArrayListIterator implements Iterator<T> {
+        private int nextCount = 0;
         private int currentIndex = -1;
         private int currentList = 0;
+        private int currentModCount = modCount;
 
         @Override
         public boolean hasNext() {
-            return currentIndex + 1 < count;
+            return nextCount + 1 < count;
         }
 
         @Override
         public T next() {
-
+            while (true) {
+                if (modCount != currentModCount) {
+                    throw new ConcurrentModificationException("Коллекция была изменена.");
+                }
+                if (currentList >= lists.length) {
+                    throw new NoSuchElementException("Таблица закончилась.");
+                }
+                if (lists[currentList] == null) {
+                    currentList++;
+                    continue;
+                }
+                if (currentIndex + 1 < lists[currentList].size()) {
+                    currentIndex++;
+                    nextCount++;
+                    return lists[currentList].get(currentIndex);
+                } else {
+                    currentIndex = -1;
+                    currentList++;
+                }
+            }
         }
     }
 
@@ -172,6 +191,7 @@ public class MyHashTable<T> implements Collection<T> {
             if (lists[hash] != null) {
                 while (lists[hash].contains(lists(o))) {
                     lists[hash].remove(lists(o));
+                    count--;
                     isChanged = true;
                 }
             }
@@ -185,13 +205,21 @@ public class MyHashTable<T> implements Collection<T> {
             return false;
         }
         boolean isChanged = false;
-        for (ArrayList a : lists) {
+        int count =  -1;
+        for (ArrayList<T> a : lists) {
+            count++;
             if (a != null) {
+                int removeCount = 0;
                 for (int i = 0; i < a.size(); i++) {
                     if (!c.contains(a.get(i))) {
-                        a.remove(i);
+                        a.remove(a.get(i));
+                        removeCount++;
+                        count--;
                         isChanged = true;
                     }
+                }
+                if (removeCount == size()) {
+                    lists[count] = null;
                 }
             }
         }
@@ -203,5 +231,24 @@ public class MyHashTable<T> implements Collection<T> {
         for (int i = 0; i < this.lists.length; i++) {
             lists[i] = null;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        int currentCount = 0;
+        for (Object o : lists) {
+            if (o == null) {
+                continue;
+            }
+            builder.append(o);
+            if (currentCount < count - 1) {
+                builder.append(",");
+            }
+            currentCount++;
+        }
+        builder.append("]");
+        return builder.toString();
     }
 }
