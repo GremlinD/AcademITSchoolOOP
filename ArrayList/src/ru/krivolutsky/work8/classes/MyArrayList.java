@@ -3,30 +3,25 @@ package ru.krivolutsky.work8.classes;
 import java.util.*;
 
 public class MyArrayList<T> implements List<T> {
-    private Object[] items = new Object[10];
+    @SuppressWarnings("unchecked")
+    private T[] items = (T[]) new Object[10];
     private int length;
+    private int modCount = 0;
 
     public MyArrayList() {
-
-    }
-
-    public MyArrayList(int capacity) {
-        this.items = new Object[capacity];
     }
 
     @SuppressWarnings("unchecked")
+    public MyArrayList(int capacity) {
+        this.items = (T[]) new Object[capacity];
+    }
+
     private T items(int index) {
-        return (T) items[index];
+        return items[index];
     }
 
     private void increaseCapacity() {
         items = Arrays.copyOf(items, items.length * 2);
-    }
-
-    public void print() {
-        for (int i = 0; i < length; i++) {
-            System.out.println(items[i]);
-        }
     }
 
     @Override
@@ -36,21 +31,17 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        return items.length > 0;
+        return length > 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        for (int i = 0; i < length; i++) {
-            if (items[i].equals(o)) {
-                return true;
-            }
-        }
-        return false;
+        return this.indexOf(o) != -1;
     }
 
     private class MyArrayListIterator implements Iterator<T> {
         private int currentIndex = -1;
+        int currentModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -59,6 +50,12 @@ public class MyArrayList<T> implements List<T> {
 
         @Override
         public T next() {
+            if (modCount != currentModCount) {
+                throw new ConcurrentModificationException("Коллекция была изменена.");
+            }
+            if (currentIndex >= items.length) {
+                throw new NoSuchElementException("Таблица закончилась.");
+            }
             ++currentIndex;
             return items(currentIndex);
         }
@@ -79,11 +76,10 @@ public class MyArrayList<T> implements List<T> {
     @Override
     @SuppressWarnings("unchecked")
     public <T1> T1[] toArray(T1[] a) {
-        if (a.length < length)
-            // Make a new array of a's runtime type, but my contents:
+        if (a.length < length) {
             return (T1[]) Arrays.copyOf(items, length, a.getClass());
-        System.arraycopy(items, 0, a, 0, length);  //сделал как как в оригинальном ArrayList,
-        // но остается ошибка.
+        }
+        System.arraycopy(items, 0, a, 0, length);
         if (a.length > length)
             a[length] = null;
         return a;
@@ -91,19 +87,23 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        try {
-            this.add(length, t);
-            return true;
-        } catch (Exception e) {
+        if (t == null) {
             return false;
         }
+        this.add(length, t);
+        modCount++;
+        return true;
     }
 
     @Override
     public boolean remove(Object o) {
+        if (o == null) {
+            return false;
+        }
         for (int i = 0; i < length; i++) {
             if (items[i].equals(o)) {
                 this.remove(i);
+                modCount++;
                 return true;
             }
         }
@@ -133,11 +133,18 @@ public class MyArrayList<T> implements List<T> {
         if (c.size() == 0) {
             return false;
         }
+        if (length + c.size() >= items.length) {
+            increaseCapacity();
+        }
+        for (int i = length + c.size(); i > index; i++) {
+            items[i] = items[i - c.size()];
+        }
         int i = index;
         for (T t : c) {
-            this.add(i, t);
+            items[i] = t;
             i++;
         }
+        modCount++;
         return true;
     }
 
@@ -151,6 +158,7 @@ public class MyArrayList<T> implements List<T> {
                 isChanged = true;
             }
         }
+        modCount++;
         return isChanged;
     }
 
@@ -164,6 +172,7 @@ public class MyArrayList<T> implements List<T> {
                 isChanged = true;
             }
         }
+        modCount++;
         return isChanged;
     }
 
@@ -173,6 +182,7 @@ public class MyArrayList<T> implements List<T> {
             items[i] = null;
         }
         length = 0;
+        modCount++;
     }
 
     @Override
@@ -185,27 +195,35 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
+        if (element == null) {
+            return null;
+        }
         if (index < 0 || index >= length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
         T t = items(index);
         items[index] = element;
+        modCount++;
         return t;
     }
 
     @Override
     public void add(int index, T element) {
+        if (element == null) {
+            return;
+        }
         if (index < 0 || index > length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
-        }
-        if (length == items.length) {
-            increaseCapacity();
         }
         length++;
         if (index < length - 1) {
             System.arraycopy(items, index, items, index + 1, length - index);
         }
         items[index] = element;
+        if (length == items.length) {
+            increaseCapacity();
+        }
+        modCount++;
     }
 
     @Override
@@ -218,6 +236,7 @@ public class MyArrayList<T> implements List<T> {
             System.arraycopy(items, index + 1, items, index, length - index - 1);
         }
         length--;
+        modCount++;
         return t;
     }
 
@@ -239,6 +258,20 @@ public class MyArrayList<T> implements List<T> {
             }
         }
         return -1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (int i = 0; i < items.length; i++) {
+            builder.append(items[i]);
+            if (i != items.length - 1) {
+                builder.append(",");
+            }
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
