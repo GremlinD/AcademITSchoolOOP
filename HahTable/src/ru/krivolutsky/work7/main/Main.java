@@ -31,9 +31,11 @@ public class Main {
         System.out.println(hashTable.contains(1));
         System.out.println(hashTable.contains(null));
         Object[] objects = hashTable.toArray();
+
         for (Object o : objects) {
             System.out.println(o);
         }
+
         System.out.println(hashTable.remove("qwe"));
         System.out.println(hashTable.remove(1));
         System.out.println(hashTable.remove(null));
@@ -45,7 +47,6 @@ public class Main {
         System.out.println(hashTable);
 
         System.out.println(hashTable.retainAll(hashTable2));
-
 
         System.out.println(hashTable);
     }
