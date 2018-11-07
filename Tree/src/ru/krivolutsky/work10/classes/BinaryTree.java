@@ -25,7 +25,6 @@ public class BinaryTree<T> {
 
         while (true) {
             if (comparator.compare(data, tmp.getData()) < 0) {
-                @SuppressWarnings("unchecked")
                 (Comparable <? super T >) data.compareTo(tmp.getData());
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();

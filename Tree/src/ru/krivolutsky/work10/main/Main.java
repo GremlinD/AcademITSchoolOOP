@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 public class Main {
     public static void main(String[] args) {
-        BinaryTree<Integer> firstTree = new BinaryTree<>(8);
+        BinaryTree<Integer> firstTree = new BinaryTree(8);
         System.out.println(firstTree.getCount());
         BinaryTree<Integer> tree = new BinaryTree<>();
         tree.insert(10);

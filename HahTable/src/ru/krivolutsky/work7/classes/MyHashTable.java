@@ -35,14 +35,11 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private T lists(Object o) {
+    private T element(Object o) {
         return (T) o;
     }
 
-    /*ToDo
-    Дописать ошибку при изменении списка
-     */
-    private class MyArrayListIterator implements Iterator<T> {
+    private class MyHashTableIterator implements Iterator<T> {
         private int nextCount = 0;
         private int currentIndex = -1;
         private int currentList = 0;
@@ -50,7 +47,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public boolean hasNext() {
-            return nextCount + 1 < count;
+            return nextCount + 1 <= count;
         }
 
         @Override
@@ -80,7 +77,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new MyArrayListIterator();
+        return new MyHashTableIterator();
     }
 
     @Override
@@ -98,19 +95,16 @@ public class MyHashTable<T> implements Collection<T> {
         return objects;
     }
 
-    /*todo
-    разобраться с функцией
-     */
     @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        if (a.length < lists.length)
-            // Make a new array of a's runtime type, but my contents:
-            return (T1[]) Arrays.copyOf(lists, lists.length, a.getClass());
-        System.arraycopy(lists, 0, a, 0, lists.length);
-        if (a.length > lists.length)
-            a[lists.length] = null;
-        return a;
+        MyHashTableIterator iterator = new MyHashTableIterator();
+        Object[] objects = new Object[count];
+        int i = 0;
+        while (iterator.hasNext()) {
+            objects[i] = iterator.next();
+        }
+        return (T1[]) Arrays.copyOf(objects, objects.length, objects.getClass());
     }
 
     @Override
@@ -159,7 +153,7 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object o : c) {
             int hash = calculateHash(o);
             if (lists[hash] != null) {
-                if (!lists[hash].contains(lists(o))) {
+                if (!lists[hash].contains(element(o))) {
                     return false;
                 }
             } else {
@@ -189,10 +183,13 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object o : c) {
             int hash = calculateHash(o);
             if (lists[hash] != null) {
-                while (lists[hash].contains(lists(o))) {
-                    lists[hash].remove(lists(o));
+                while (lists[hash].contains(element(o))) {
+                    lists[hash].remove(element(o));
                     count--;
                     isChanged = true;
+                }
+                if (lists[hash].size() == 0) {
+                    lists[hash] = null;
                 }
             }
         }
@@ -205,22 +202,19 @@ public class MyHashTable<T> implements Collection<T> {
             return false;
         }
         boolean isChanged = false;
-        int count =  -1;
-        for (ArrayList<T> a : lists) {
-            count++;
-            if (a != null) {
-                int removeCount = 0;
-                for (int i = 0; i < a.size(); i++) {
-                    if (!c.contains(a.get(i))) {
-                        a.remove(a.get(i));
-                        removeCount++;
-                        count--;
-                        isChanged = true;
-                    }
+        MyHashTableIterator iterator = new MyHashTableIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            int hash = calculateHash(object);
+            if (lists[hash] != null) {
+                if (!c.contains(object)) {
+                    lists[hash].remove(element(object));
+                    isChanged = true;
+                    count--;
                 }
-                if (removeCount == size()) {
-                    lists[count] = null;
-                }
+            }
+            if (lists[hash].size() == 0) {
+                lists[hash] = null;
             }
         }
         return isChanged;
@@ -238,7 +232,7 @@ public class MyHashTable<T> implements Collection<T> {
         StringBuilder builder = new StringBuilder();
         builder.append("[");
         int currentCount = 0;
-        for (Object o : lists) {
+        for (ArrayList o : lists) {
             if (o == null) {
                 continue;
             }
@@ -246,7 +240,7 @@ public class MyHashTable<T> implements Collection<T> {
             if (currentCount < count - 1) {
                 builder.append(",");
             }
-            currentCount++;
+            currentCount += o.size();
         }
         builder.append("]");
         return builder.toString();
