@@ -49,5 +49,8 @@ public class Main {
         System.out.println(hashTable.retainAll(hashTable2));
 
         System.out.println(hashTable);
+
+        hashTable2.clear();
+        System.out.println(hashTable2);
     }
 }
