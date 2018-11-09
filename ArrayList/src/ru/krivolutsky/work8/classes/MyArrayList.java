@@ -16,10 +16,6 @@ public class MyArrayList<T> implements List<T> {
         this.items = (T[]) new Object[capacity];
     }
 
-    private T items(int index) {
-        return items[index];
-    }
-
     private void increaseCapacity() {
         items = Arrays.copyOf(items, items.length * 2);
     }
@@ -31,7 +27,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        return length > 0;
+        return length == 0;
     }
 
     @Override

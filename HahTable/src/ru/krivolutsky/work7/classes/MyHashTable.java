@@ -19,7 +19,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean isEmpty() {
-        return count > 0;
+        return count == 0;
     }
 
     private class MyHashTableIterator implements Iterator<T> {
