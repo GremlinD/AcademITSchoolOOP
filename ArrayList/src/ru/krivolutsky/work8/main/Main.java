@@ -15,7 +15,7 @@ public class Main {
             arrayList.add("prevSecond");
             arrayList.add((char) 20);
             arrayList.add(12);
-            arrayList.add("asd");
+            arrayList.add(null);
             arrayList.add(1, "second");
             System.out.println(arrayList);
             System.out.println();
@@ -53,7 +53,7 @@ public class Main {
             objects.add(135);
             System.out.println(arrayList.containsAll(objects));
             System.out.println();
-            arrayList.remove((Integer) 12);
+            arrayList.remove(null);
             System.out.println(arrayList);
             System.out.println();
             Object[] objects1;
@@ -64,6 +64,5 @@ public class Main {
         } catch (IndexOutOfBoundsException e) {
             System.out.println(e.getMessage());
         }
-
     }
 }
