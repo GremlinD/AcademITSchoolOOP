@@ -24,8 +24,8 @@ public class BinaryTree<T> {
         TreeNode<T> tmp = root;
 
         while (true) {
-            if (comparator.compare(data, tmp.getData()) < 0) {
-                (Comparable <? super T >) data.compareTo(tmp.getData());
+            if (this.comparator.compare(data, tmp.getData()) < 0) {
+
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {
@@ -48,9 +48,9 @@ public class BinaryTree<T> {
     public TreeNode<T> searchNode(T data) {
         TreeNode<T> tmp = root;
         while (true) {
-            if (data.compareTo(tmp.getData()) == 0) {
+            if (comparator.compare(data, tmp.getData()) == 0) {
                 return tmp;
-            } else if (data.compareTo(tmp.getData()) < 0) {
+            } else if (comparator.compare(data, tmp.getData()) < 0) {
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {
@@ -126,7 +126,7 @@ public class BinaryTree<T> {
                                 prevMin.setRight(null);
                             }
                         } else if (prevDelete != null) {
-                            if (prevDelete.getData().compareTo(delete.getData()) < 0) {
+                            if (comparator.compare(prevDelete.getData(), delete.getData()) < 0) {
                                 prevDelete.setRight(null);
                             } else {
                                 prevDelete.setLeft(null);
@@ -152,7 +152,7 @@ public class BinaryTree<T> {
                         }
                     }
                     if (prevDelete != null) {
-                        if (prevDelete.getData().compareTo(delete.getData()) <= 0) {
+                        if (comparator.compare(prevDelete.getData(), delete.getData()) <= 0) {
                             if (!Objects.equals(min, delete.getRight())) {
                                 min.setRight(delete.getRight());
                             }
@@ -173,7 +173,7 @@ public class BinaryTree<T> {
                 }
                 elementCount--;
                 return true;
-            } else if (data.compareTo(delete.getData()) < 0) {
+            } else if (comparator.compare(data, delete.getData()) < 0) {
                 if (delete.getLeft() != null) {
                     prevDelete = delete;
                     delete = delete.getLeft();

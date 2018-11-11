@@ -3,13 +3,15 @@ package ru.krivolutsky.work10.main;
 import ru.krivolutsky.work10.classes.BinaryTree;
 import ru.krivolutsky.work10.classes.TreeNode;
 
+import java.util.Comparator;
 import java.util.function.Consumer;
 
 public class Main {
     public static void main(String[] args) {
-        BinaryTree<Integer> firstTree = new BinaryTree(8);
+        Comparator<Integer> comparator = (o1, o2) -> (o1 > o2) ? 1 : (o1 == o2) ? 0 : -1;
+        BinaryTree<Integer> firstTree = new BinaryTree<>(comparator);
         System.out.println(firstTree.getCount());
-        BinaryTree<Integer> tree = new BinaryTree<>();
+        BinaryTree<Integer> tree = new BinaryTree<>(comparator);
         tree.insert(10);
         tree.insert(5);
 
