@@ -50,7 +50,7 @@ public class MyArrayList<T> implements List<T> {
                 throw new ConcurrentModificationException("Коллекция была изменена.");
             }
             if (currentIndex >= items.length) {
-                throw new NoSuchElementException("Таблица закончилась.");
+                throw new NoSuchElementException("Список закончен.");
             }
             ++currentIndex;
             return items[currentIndex];
@@ -64,9 +64,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[length];
-        System.arraycopy(items, 0, array, 0, length);
-        return array;
+        return Arrays.copyOf(items, length, items.getClass());
     }
 
     @Override
@@ -85,7 +83,6 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public boolean add(T t) {
         this.add(length, t);
-        modCount++;
         return true;
     }
 
@@ -94,7 +91,6 @@ public class MyArrayList<T> implements List<T> {
         int i = this.indexOf(o);
         if (i != -1) {
             this.remove(i);
-            modCount++;
             return true;
         }
         return false;
@@ -145,8 +141,10 @@ public class MyArrayList<T> implements List<T> {
                 this.remove(i);
                 i--;
                 isChanged = true;
-                modCount++;
             }
+        }
+        if (isChanged) {
+            modCount++;
         }
         return isChanged;
     }
@@ -159,8 +157,10 @@ public class MyArrayList<T> implements List<T> {
                 this.remove(i);
                 i--;
                 isChanged = true;
-                modCount++;
             }
+        }
+        if (isChanged) {
+            modCount++;
         }
         return isChanged;
     }
@@ -184,15 +184,11 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        if (element == null) {
-            return null;
-        }
         if (index < 0 || index >= length) {
             throw new IndexOutOfBoundsException("Индекс выходит за границы списка");
         }
         T t = items[index];
         items[index] = element;
-        modCount++;
         return t;
     }
 
@@ -229,19 +225,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < length; i++) {
-            if (items[i] == null) {
-                if (o == null) {
-                    return i;
-                }
-                else {
-                    if (i == length - 1){
-                        return -1;
-                    } else {
-                        continue;
-                    }
-                }
-            }
-            if (items[i].equals(o)) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -251,14 +235,7 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = length - 1; i >= 0; i--) {
-            if (items[i] == null) {
-                if (o == null) {
-                    return i;
-                } else {
-                    return -1;
-                }
-            }
-            if (items[i].equals(o)) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }

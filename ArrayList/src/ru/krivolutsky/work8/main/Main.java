@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
         try {
             MyArrayList<Object> arrayList = new MyArrayList<>();
-            System.out.println(arrayList.isEmpty());
             System.out.println();
             arrayList.add(12);
+            System.out.println(arrayList.isEmpty());
             arrayList.add("prevSecond");
             arrayList.add((char) 20);
             arrayList.add(12);
