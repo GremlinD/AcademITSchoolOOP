@@ -124,8 +124,7 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean contains(Object o) {
         int hash = calculateHash(o);
         if (lists[hash] != null) {
-            boolean is = lists[hash].contains(o);
-            return is;
+            return lists[hash].contains(o);
         }
         return false;
     }
