@@ -7,7 +7,6 @@ public class Main {
         MyHashTable<Object> hashTable2 = new MyHashTable<>();
         hashTable2.add(12);
         hashTable2.add("asd");
-        hashTable2.add((char) 20);
 
         MyHashTable<Object> hashTable = new MyHashTable<>();
         hashTable.add(12);
@@ -46,6 +45,7 @@ public class Main {
 
         System.out.println(hashTable);
 
+        hashTable2.add((byte)6);
         System.out.println(hashTable.retainAll(hashTable2));
 
         System.out.println(hashTable);

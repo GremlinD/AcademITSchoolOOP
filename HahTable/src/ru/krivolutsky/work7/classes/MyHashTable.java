@@ -35,29 +35,29 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("Таблица закончилась.");
+            }
             if (modCount != currentModCount) {
                 throw new ConcurrentModificationException("Коллекция была изменена.");
             }
-            if (this.hasNext()) {
-                while (true) {
-                    if (currentList >= lists.length) {
-                        throw new NoSuchElementException("Таблица закончилась.");
-                    }
-                    if (lists[currentList] == null) {
-                        currentList++;
-                        continue;
-                    }
-                    if (currentIndex + 1 < lists[currentList].size()) {
-                        currentIndex++;
-                        nextCount++;
-                        return lists[currentList].get(currentIndex);
-                    } else {
-                        currentIndex = -1;
-                        currentList++;
-                    }
+            while (true) {
+                if (currentList >= lists.length) {
+                    throw new NoSuchElementException("Таблица закончилась.");
+                }
+                if (lists[currentList] == null) {
+                    currentList++;
+                    continue;
+                }
+                if (currentIndex + 1 < lists[currentList].size()) {
+                    currentIndex++;
+                    nextCount++;
+                    return lists[currentList].get(currentIndex);
+                } else {
+                    currentIndex = -1;
+                    currentList++;
                 }
             }
-            return null;
         }
     }
 
@@ -81,18 +81,15 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         Object[] objects = new Object[count];
-        int i = 0;
+        int i = -1;
         for (Object o : a) {
-            objects[i] = o;
             i++;
+            objects[i] = o;
         }
         if (a.length < count) {
             return (T1[]) Arrays.copyOf(objects, count, a.getClass());
         }
-        System.arraycopy(objects, 0, a, 0, count);
-        if (a.length > count)
-            a[count] = null;
-        return a;
+        return (T1[]) objects;
     }
 
     @Override
@@ -127,7 +124,8 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean contains(Object o) {
         int hash = calculateHash(o);
         if (lists[hash] != null) {
-            return lists[hash].contains(o);
+            boolean is = lists[hash].contains(o);
+            return is;
         }
         return false;
     }
@@ -137,13 +135,12 @@ public class MyHashTable<T> implements Collection<T> {
         if (c.size() == 0) {
             return false;
         }
-        boolean isChange = false;
         for (Object o : c) {
             if (!this.contains(o)) {
-                isChange = this.remove(o);
+                return false;
             }
         }
-        return isChange;
+        return true;
     }
 
     @Override
@@ -164,7 +161,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
         boolean isChanged = false;
         for (Object o : c) {
-            while (true){
+            while (true) {
                 if (!this.remove(o)) {
                     break;
                 } else {
@@ -181,19 +178,15 @@ public class MyHashTable<T> implements Collection<T> {
             return false;
         }
         boolean isChanged = false;
-        MyHashTableIterator iterator = new MyHashTableIterator();
-        while (iterator.hasNext()) {
-            Object object = iterator.next();
-            int hash = calculateHash(object);
-            if (lists[hash] != null) {
-                if (!c.contains(object)) {
-                    lists[hash].remove(object);
-                    isChanged = true;
-                    count--;
-                }
+        for (ArrayList<T> list : this.lists) {
+            if (list == null) {
+                continue;
             }
-            if (lists[hash].size() == 0) {
-                lists[hash] = null;
+            for (int j = 0; j < list.size(); j++) { //требует foreach, но foreach вызывает ошибку.
+                if (!c.contains(list.get(j))) {
+                    this.remove(list.get(j));
+                    isChanged = true;
+                }
             }
         }
         return isChanged;
