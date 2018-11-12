@@ -15,6 +15,22 @@ public class BinaryTree<T> {
         this.comparator = comparator;
     }
 
+    private int compare(T t1, T t2) {
+        if (Objects.equals(t1, t2)) {
+            return 0;
+        }
+        if (t1 == null || t2 == null) {
+            return (t1 == null) ? 1 : -1;
+        }
+        if (((Comparable<T>) t1).compareTo(t2) > 0) {
+            return 1;
+        }
+        if (((Comparable<T>) t1).compareTo(t2) < 0) {
+            return -1;
+        }
+        throw new UnsupportedOperationException("Ошибка при стандартном сравнении, используйте свой компаратор.");
+    }
+
     public void insert(T data) {
         if (root == null) {
             root = new TreeNode<>(data);
@@ -24,8 +40,13 @@ public class BinaryTree<T> {
         TreeNode<T> tmp = root;
 
         while (true) {
-            if (this.comparator.compare(data, tmp.getData()) < 0) {
-
+            int compareNumber;
+            if (this.comparator == null) {
+                compareNumber = this.compare(data, tmp.getData());
+            } else {
+                compareNumber = this.comparator.compare(data, tmp.getData());
+            }
+            if (compareNumber < 0) {
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {
@@ -48,9 +69,15 @@ public class BinaryTree<T> {
     public TreeNode<T> searchNode(T data) {
         TreeNode<T> tmp = root;
         while (true) {
-            if (comparator.compare(data, tmp.getData()) == 0) {
+            int compareNumber;
+            if (this.comparator == null) {
+                compareNumber = this.compare(data, tmp.getData());
+            } else {
+                compareNumber = this.comparator.compare(data, tmp.getData());
+            }
+            if (compareNumber == 0) {
                 return tmp;
-            } else if (comparator.compare(data, tmp.getData()) < 0) {
+            } else if (compareNumber < 0) {
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {
@@ -126,7 +153,13 @@ public class BinaryTree<T> {
                                 prevMin.setRight(null);
                             }
                         } else if (prevDelete != null) {
-                            if (comparator.compare(prevDelete.getData(), delete.getData()) < 0) {
+                            int compareNumber;
+                            if (this.comparator != null) {
+                                compareNumber = this.compare(prevDelete.getData(), delete.getData());
+                            } else {
+                                compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
+                            }
+                            if (compareNumber < 0) {
                                 prevDelete.setRight(null);
                             } else {
                                 prevDelete.setLeft(null);
@@ -152,7 +185,13 @@ public class BinaryTree<T> {
                         }
                     }
                     if (prevDelete != null) {
-                        if (comparator.compare(prevDelete.getData(), delete.getData()) <= 0) {
+                        int compareNumber;
+                        if (this.comparator != null) {
+                            compareNumber = this.compare(prevDelete.getData(), delete.getData());
+                        } else {
+                            compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
+                        }
+                        if (compareNumber <= 0) {
                             if (!Objects.equals(min, delete.getRight())) {
                                 min.setRight(delete.getRight());
                             }
@@ -173,19 +212,27 @@ public class BinaryTree<T> {
                 }
                 elementCount--;
                 return true;
-            } else if (comparator.compare(data, delete.getData()) < 0) {
-                if (delete.getLeft() != null) {
-                    prevDelete = delete;
-                    delete = delete.getLeft();
-                } else {
-                    return false;
-                }
             } else {
-                if (delete.getRight() != null) {
-                    prevDelete = delete;
-                    delete = delete.getRight();
+                int compareNumber;
+                if (this.comparator == null) {
+                    compareNumber = this.compare(data, delete.getData());
                 } else {
-                    return false;
+                    compareNumber = this.comparator.compare(data, delete.getData());
+                }
+                if (compareNumber < 0) {
+                    if (delete.getLeft() != null) {
+                        prevDelete = delete;
+                        delete = delete.getLeft();
+                    } else {
+                        return false;
+                    }
+                } else {
+                    if (delete.getRight() != null) {
+                        prevDelete = delete;
+                        delete = delete.getRight();
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
