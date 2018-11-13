@@ -119,7 +119,7 @@ public class MyArrayList<T> implements List<T> {
         if (c.size() == 0) {
             return false;
         }
-        if (length + c.size() >= items.length) {
+        while (length + c.size() >= items.length) {
             increaseCapacity();
         }
         System.arraycopy(items, index, items, index + 1, length + c.size() - index);

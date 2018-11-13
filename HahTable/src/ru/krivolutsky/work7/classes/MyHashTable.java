@@ -93,18 +93,6 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        int hash = calculateHash(t);
-        if (lists[hash] == null) {
-            lists[hash] = new ArrayList<>();
-        }
-        lists[hash].add(t);
-        count++;
-        modCount++;
-        return true;
-    }
-
-    @Override
     public boolean remove(Object o) {
         int hash = calculateHash(o);
         boolean isChange = false;
@@ -150,6 +138,18 @@ public class MyHashTable<T> implements Collection<T> {
         for (T t : c) {
             this.add(t);
         }
+        return true;
+    }
+
+    @Override
+    public boolean add(T t) {
+        int hash = calculateHash(t);
+        if (lists[hash] == null) {
+            lists[hash] = new ArrayList<>();
+        }
+        lists[hash].add(t);
+        count++;
+        modCount++;
         return true;
     }
 
