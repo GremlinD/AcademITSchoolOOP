@@ -80,14 +80,14 @@ public class MyHashTable<T> implements Collection<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        Object[] objects = new Object[count];
-        int i = -1;
-        for (Object o : a) {
-            i++;
-            objects[i] = o;
-        }
-        if (a.length < count) {
+        ArrayList<T1> list = new ArrayList<>();
+        Collections.addAll(list, a);
+        Object[] objects = list.toArray();
+        if (objects.length < count) {
             return (T1[]) Arrays.copyOf(objects, count, a.getClass());
+        }
+        if (objects.length > count) {
+            objects[count] = null;
         }
         return (T1[]) objects;
     }
@@ -120,7 +120,7 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean containsAll(Collection<?> c) {
         if (c.size() == 0) {
-            return false;
+            return true;
         }
         for (Object o : c) {
             if (!this.contains(o)) {
@@ -178,14 +178,8 @@ public class MyHashTable<T> implements Collection<T> {
         }
         boolean isChanged = false;
         for (ArrayList<T> list : this.lists) {
-            if (list == null) {
-                continue;
-            }
-            for (int j = 0; j < list.size(); j++) { //требует foreach, но foreach вызывает ошибку.
-                if (!c.contains(list.get(j))) {
-                    this.remove(list.get(j));
-                    isChanged = true;
-                }
+            if (list != null) {
+                isChanged = list.containsAll(c);
             }
         }
         return isChanged;

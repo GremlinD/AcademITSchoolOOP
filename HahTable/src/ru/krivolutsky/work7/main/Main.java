@@ -19,8 +19,7 @@ public class Main {
         hashTable.add(null);
         hashTable.add((char) 12);
 
-        for (Object o :
-                hashTable) {
+        for (Object o : hashTable) {
             System.out.println(o);
         }
 
