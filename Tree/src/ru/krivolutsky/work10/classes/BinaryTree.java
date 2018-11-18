@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 public class BinaryTree<T> {
     private TreeNode<T> root;
-    private int elementCount = 0;
+    private int count = 0;
     private Comparator<T> comparator;
 
     public BinaryTree() {
@@ -16,17 +16,20 @@ public class BinaryTree<T> {
     }
 
     private int compare(T t1, T t2) {
-        if (Objects.equals(t1, t2)) {
-            return 0;
-        }
-        if (t1 == null || t2 == null) {
-            return (t1 == null) ? 1 : -1;
-        }
-        if (((Comparable<T>) t1).compareTo(t2) > 0) {
-            return 1;
-        }
-        if (((Comparable<T>) t1).compareTo(t2) < 0) {
-            return -1;
+        if (this.comparator == null) {
+            if (Objects.equals(t1, t2)) {
+                return 0;
+            }
+            if (t1 == null || t2 == null) {
+                return (t1 == null) ? 1 : -1;
+            }
+            int tmp = ((Comparable<T>) t1).compareTo(t2);
+            if (tmp > 0) {
+                return 1;
+            }
+            if (tmp < 0) {
+                return -1;
+            }
         }
         throw new UnsupportedOperationException("Ошибка при стандартном сравнении, используйте свой компаратор.");
     }
@@ -34,7 +37,7 @@ public class BinaryTree<T> {
     public void insert(T data) {
         if (root == null) {
             root = new TreeNode<>(data);
-            elementCount++;
+            count++;
             return;
         }
         TreeNode<T> tmp = root;
@@ -51,7 +54,7 @@ public class BinaryTree<T> {
                     tmp = tmp.getLeft();
                 } else {
                     tmp.setLeft(new TreeNode<>(data));
-                    elementCount++;
+                    count++;
                     return;
                 }
             } else {
@@ -59,7 +62,7 @@ public class BinaryTree<T> {
                     tmp = tmp.getRight();
                 } else {
                     tmp.setRight(new TreeNode<>(data));
-                    elementCount++;
+                    count++;
                     return;
                 }
             }
@@ -94,156 +97,154 @@ public class BinaryTree<T> {
     }
 
     public int getCount() {
-        return elementCount;
+        return count;
     }
 
     public boolean deleteByValue(T data) {
         TreeNode<T> delete = root;
         TreeNode<T> prevDelete = null;
-        while (true) {
-            if (data == delete.getData()) {
-                if (delete.getLeft() == null && delete.getRight() == null) {
-                    if (prevDelete != null) {
-                        if (prevDelete.getRight().equals(delete)) {
-                            prevDelete.setRight(null);
-                        } else {
-                            prevDelete.setLeft(null);
-                        }
-                    } else {
-                        root = null;
-                    }
-                    elementCount--;
-                    return true;
-                } else if (delete.getLeft() == null) {
-                    if (prevDelete != null) {
-                        if (prevDelete.getRight().equals(delete)) {
-                            prevDelete.setRight(delete.getRight());
-                        } else {
-                            prevDelete.setLeft(delete.getRight());
-                        }
-                    } else {
-                        root = root.getRight();
-                    }
-                    return true;
-                } else if (delete.getRight() == null) {
-                    if (prevDelete != null) {
-                        if (prevDelete.getRight().equals(delete)) {
-                            prevDelete.setRight(delete.getLeft());
-                        } else {
-                            prevDelete.setLeft(delete.getLeft());
-                        }
-                    } else {
-                        root = root.getLeft();
-                    }
-                    elementCount--;
-                    return true;
-                } else {
-                    TreeNode<T> min = delete.getRight();
-                    TreeNode<T> prevMin = null;
-                    while (min.getLeft() != null) {
-                        prevMin = min;
-                        min = min.getLeft();
-                    }
-                    TreeNode<T> node = min;
-                    if (min.getRight() == null) {
-                        if (prevMin != null) {
-                            if (prevMin.getLeft().equals(min)) {
-                                prevMin.setLeft(null);
-                            } else {
-                                prevMin.setRight(null);
-                            }
-                        } else if (prevDelete != null) {
-                            int compareNumber;
-                            if (this.comparator != null) {
-                                compareNumber = this.compare(prevDelete.getData(), delete.getData());
-                            } else {
-                                compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
-                            }
-                            if (compareNumber < 0) {
-                                prevDelete.setRight(null);
-                            } else {
-                                prevDelete.setLeft(null);
-                            }
-                        } else {
-                            min.setLeft(delete.getLeft());
-                            this.root = min;
-                        }
-                    } else {
-                        if (prevMin != null) {
-                            if (prevMin.getLeft().equals(min)) {
-                                prevMin.setLeft(min.getRight());
-                            } else {
-                                prevMin.setRight(min.getRight());
-                            }
-                        } else {
-                            if (prevDelete != null) {
-                                prevDelete.setRight(delete.getRight());
-                            } else {
-                                min.setLeft(delete.getLeft());
-                                this.root = min;
-                            }
-                        }
-                    }
-                    if (prevDelete != null) {
-                        int compareNumber;
-                        if (this.comparator != null) {
-                            compareNumber = this.compare(prevDelete.getData(), delete.getData());
-                        } else {
-                            compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
-                        }
-                        if (compareNumber <= 0) {
-                            if (!Objects.equals(min, delete.getRight())) {
-                                min.setRight(delete.getRight());
-                            }
-                            min.setLeft(delete.getLeft());
-                            prevDelete.setRight(node);
-                        } else {
-                            if (!min.equals(delete.getRight())) {
-                                min.setRight(delete.getRight());
-                            }
-                            min.setLeft(delete.getLeft());
-                            prevDelete.setLeft(node);
-                        }
-                    } else {
-                        min.setLeft(this.root.getLeft());
-                        min.setRight(this.root.getRight());
-                        this.root = min;
-                    }
-                }
-                elementCount--;
-                return true;
+        while (data != delete.getData()) {
+            int compareNumber;
+            if (this.comparator == null) {
+                compareNumber = this.compare(data, delete.getData());
             } else {
-                int compareNumber;
-                if (this.comparator == null) {
-                    compareNumber = this.compare(data, delete.getData());
+                compareNumber = this.comparator.compare(data, delete.getData());
+            }
+            if (compareNumber < 0) {
+                if (delete.getLeft() != null) {
+                    prevDelete = delete;
+                    delete = delete.getLeft();
                 } else {
-                    compareNumber = this.comparator.compare(data, delete.getData());
+                    return false;
                 }
-                if (compareNumber < 0) {
-                    if (delete.getLeft() != null) {
-                        prevDelete = delete;
-                        delete = delete.getLeft();
-                    } else {
-                        return false;
-                    }
+            } else {
+                if (delete.getRight() != null) {
+                    prevDelete = delete;
+                    delete = delete.getRight();
                 } else {
-                    if (delete.getRight() != null) {
-                        prevDelete = delete;
-                        delete = delete.getRight();
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
             }
         }
+
+        if (delete.getLeft() == null && delete.getRight() == null) {
+            if (prevDelete != null) {
+                if (prevDelete.getRight() == delete) {
+                    prevDelete.setRight(null);
+                } else {
+                    prevDelete.setLeft(null);
+                }
+            } else {
+                root = null;
+            }
+            count--;
+            return true;
+        } else if (delete.getLeft() == null) {
+            if (prevDelete != null) {
+                if (prevDelete.getRight() == delete) {
+                    prevDelete.setRight(delete.getRight());
+                } else {
+                    prevDelete.setLeft(delete.getRight());
+                }
+            } else {
+                root = root.getRight();
+            }
+            return true;
+        } else if (delete.getRight() == null) {
+            if (prevDelete != null) {
+                if (prevDelete.getRight() == delete) {
+                    prevDelete.setRight(delete.getLeft());
+                } else {
+                    prevDelete.setLeft(delete.getLeft());
+                }
+            } else {
+                root = root.getLeft();
+            }
+            count--;
+            return true;
+        } else {
+            TreeNode<T> min = delete.getRight();
+            TreeNode<T> prevMin = null;
+            while (min.getLeft() != null) {
+                prevMin = min;
+                min = min.getLeft();
+            }
+            TreeNode<T> node = min;
+            if (min.getRight() == null) {
+                if (prevMin != null) {
+                    if (prevMin.getLeft() == min) {
+                        prevMin.setLeft(null);
+                    } else {
+                        prevMin.setRight(null);
+                    }
+                } else if (prevDelete != null) {
+                    int compareNumber;
+                    if (this.comparator != null) {
+                        compareNumber = this.compare(prevDelete.getData(), delete.getData());
+                    } else {
+                        compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
+                    }
+                    if (compareNumber < 0) {
+                        prevDelete.setRight(null);
+                    } else {
+                        prevDelete.setLeft(null);
+                    }
+                } else {
+                    min.setLeft(delete.getLeft());
+                    this.root = min;
+                }
+            } else {
+                if (prevMin != null) {
+                    if (prevMin.getLeft() == min) {
+                        prevMin.setLeft(min.getRight());
+                    } else {
+                        prevMin.setRight(min.getRight());
+                    }
+                } else {
+                    if (prevDelete != null) {
+                        prevDelete.setRight(delete.getRight());
+                    } else {
+                        min.setLeft(delete.getLeft());
+                        this.root = min;
+                    }
+                }
+            }
+            if (prevDelete != null) {
+                int compareNumber;
+                if (this.comparator != null) {
+                    compareNumber = this.compare(prevDelete.getData(), delete.getData());
+                } else {
+                    compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
+                }
+                if (compareNumber <= 0) {
+                    if (min != delete.getRight()) {
+                        min.setRight(delete.getRight());
+                    }
+                    min.setLeft(delete.getLeft());
+                    prevDelete.setRight(node);
+                } else {
+                    if (min != delete.getRight()) {
+                        min.setRight(delete.getRight());
+                    }
+                    min.setLeft(delete.getLeft());
+                    prevDelete.setLeft(node);
+                }
+            } else {
+                min.setLeft(this.root.getLeft());
+                min.setRight(this.root.getRight());
+                this.root = min;
+            }
+        }
+        count--;
+        return true;
     }
 
     public void walkWide(Consumer<T> consumer) {
         Queue<TreeNode<T>> queue = new LinkedList<>();
         queue.add(root);
-        while (queue.peek() != null) {
-            TreeNode<T> treeNode = queue.element();
-            consumer.accept(queue.remove().getData());
+        while (queue.isEmpty()) {
+            TreeNode<T> treeNode = queue.remove();
+            consumer.accept(treeNode.getData());
             if (treeNode.getLeft() != null) {
                 queue.add(treeNode.getLeft());
             }
@@ -270,9 +271,9 @@ public class BinaryTree<T> {
     public void bypassInDepth(Consumer<T> consumer) {
         Deque<TreeNode<T>> stack = new LinkedList<>();
         stack.add(root);
-        while (stack.peekLast() != null) {
-            TreeNode<T> treeNode = stack.getLast();
-            consumer.accept(stack.removeLast().getData());
+        while (stack.isEmpty()) {
+            TreeNode<T> treeNode = stack.removeLast();
+            consumer.accept(treeNode.getData());
             if (treeNode.getRight() != null) {
                 stack.addLast(treeNode.getRight());
             }
