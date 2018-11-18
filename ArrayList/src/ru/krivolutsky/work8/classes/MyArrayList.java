@@ -20,6 +20,10 @@ public class MyArrayList<T> implements List<T> {
         items = Arrays.copyOf(items, items.length * 2);
     }
 
+    private void increaseCapacity(int factor) {
+        items = Arrays.copyOf(items, items.length * factor);
+    }
+
     @Override
     public int size() {
         return length;
@@ -119,8 +123,12 @@ public class MyArrayList<T> implements List<T> {
         if (c.size() == 0) {
             return false;
         }
+        int tmp = 1;
         while (length + c.size() >= items.length) {
-            increaseCapacity();
+            tmp++;
+        }
+        if (tmp > 1) {
+            increaseCapacity(tmp);
         }
         System.arraycopy(items, index, items, index + 1, length + c.size() - index);
         int i = index;
