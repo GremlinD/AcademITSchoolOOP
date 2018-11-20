@@ -2,8 +2,11 @@ package ru.krivolutsky.work12.main;
 
 import ru.krivolutsky.work12.classes.Person;
 
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -55,5 +58,13 @@ public class Main {
         System.out.println(from20To45.stream()
                 .map(Person::getName)
                 .collect(Collectors.joining(", ", "Возраст: ", ".")));
+
+        Scanner scanner = new Scanner(new InputStreamReader(System.in));
+        int count = scanner.nextInt();
+        Stream stream = Stream.iterate(0, x -> x + 1).map(Math::sqrt);
+        stream.limit(count).forEach(System.out::println);
+
+        Stream stream2 = Stream.iterate(0, x -> x + 1).map(Math::sqrt);
+        stream2.limit(count).forEach(System.out::println);
     }
 }
