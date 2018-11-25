@@ -80,16 +80,14 @@ public class MyHashTable<T> implements Collection<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        ArrayList<T1> list = new ArrayList<>();
-        Collections.addAll(list, a);
-        Object[] objects = list.toArray();
-        if (objects.length < count) {
-            return (T1[]) Arrays.copyOf(objects, count, a.getClass());
+        if (a.length < count) {
+            return (T1[]) Arrays.copyOf(this.lists, count, a.getClass());
         }
-        if (objects.length > count) {
-            objects[count] = null;
+        System.arraycopy(this.lists, 0, a, 0, count);
+        if (a.length > count) {
+            a[count] = null;
         }
-        return (T1[]) objects;
+        return a;
     }
 
     @Override
@@ -179,7 +177,7 @@ public class MyHashTable<T> implements Collection<T> {
         boolean isChanged = false;
         for (ArrayList<T> list : this.lists) {
             if (list != null) {
-                isChanged = list.containsAll(c);
+                isChanged = list.retainAll(c);
             }
         }
         return isChanged;
