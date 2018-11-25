@@ -124,7 +124,7 @@ public class MyArrayList<T> implements List<T> {
             return false;
         }
         int tmp = 1;
-        while (length + c.size() >= items.length) {
+        while (length + c.size() * tmp >= items.length) {
             tmp++;
         }
         if (tmp > 1) {

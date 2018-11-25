@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 public class BinaryTree<T> {
     private TreeNode<T> root;
     private int count = 0;
-    private Comparator<T> comparator;
+    private Comparator<T> comparator = null;
 
     public BinaryTree() {
     }
@@ -16,7 +16,9 @@ public class BinaryTree<T> {
     }
 
     private int compare(T t1, T t2) {
-        if (this.comparator == null) {
+        if (this.comparator != null) {
+            return this.comparator.compare(t1, t2);
+        } else {
             if (Objects.equals(t1, t2)) {
                 return 0;
             }
@@ -43,13 +45,7 @@ public class BinaryTree<T> {
         TreeNode<T> tmp = root;
 
         while (true) {
-            int compareNumber;
-            if (this.comparator == null) {
-                compareNumber = this.compare(data, tmp.getData());
-            } else {
-                compareNumber = this.comparator.compare(data, tmp.getData());
-            }
-            if (compareNumber < 0) {
+            if (compare(data, tmp.getData()) < 0) {
                 if (tmp.getLeft() != null) {
                     tmp = tmp.getLeft();
                 } else {
@@ -72,12 +68,7 @@ public class BinaryTree<T> {
     public TreeNode<T> searchNode(T data) {
         TreeNode<T> tmp = root;
         while (true) {
-            int compareNumber;
-            if (this.comparator == null) {
-                compareNumber = this.compare(data, tmp.getData());
-            } else {
-                compareNumber = this.comparator.compare(data, tmp.getData());
-            }
+            int compareNumber = compare(data, tmp.getData());
             if (compareNumber == 0) {
                 return tmp;
             } else if (compareNumber < 0) {
@@ -104,13 +95,7 @@ public class BinaryTree<T> {
         TreeNode<T> delete = root;
         TreeNode<T> prevDelete = null;
         while (data != delete.getData()) {
-            int compareNumber;
-            if (this.comparator == null) {
-                compareNumber = this.compare(data, delete.getData());
-            } else {
-                compareNumber = this.comparator.compare(data, delete.getData());
-            }
-            if (compareNumber < 0) {
+            if (compare(data, delete.getData()) < 0) {
                 if (delete.getLeft() != null) {
                     prevDelete = delete;
                     delete = delete.getLeft();
@@ -178,13 +163,7 @@ public class BinaryTree<T> {
                         prevMin.setRight(null);
                     }
                 } else if (prevDelete != null) {
-                    int compareNumber;
-                    if (this.comparator != null) {
-                        compareNumber = this.compare(prevDelete.getData(), delete.getData());
-                    } else {
-                        compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
-                    }
-                    if (compareNumber < 0) {
+                    if (compare(prevDelete.getData(), delete.getData()) < 0) {
                         prevDelete.setRight(null);
                     } else {
                         prevDelete.setLeft(null);
@@ -210,13 +189,7 @@ public class BinaryTree<T> {
                 }
             }
             if (prevDelete != null) {
-                int compareNumber;
-                if (this.comparator != null) {
-                    compareNumber = this.compare(prevDelete.getData(), delete.getData());
-                } else {
-                    compareNumber = this.comparator.compare(prevDelete.getData(), delete.getData());
-                }
-                if (compareNumber <= 0) {
+                if (compare(prevDelete.getData(), delete.getData()) <= 0) {
                     if (min != delete.getRight()) {
                         min.setRight(delete.getRight());
                     }
